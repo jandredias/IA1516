@@ -2,10 +2,10 @@
 ;;; 75741 João Figueiredo
 ;;; 75966 Frederico Moura
 ;;; 78865 Miguel Amaral
-(load "tabuleiro.lisp")
 (load "accao.lisp")
 (load "estado.lisp")
 (load "function_search.lisp")
+(load "tabuleiro.lisp")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; PROBLEMA ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
