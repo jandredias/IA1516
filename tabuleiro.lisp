@@ -23,9 +23,9 @@
 (defun tabuleiro-altura-coluna (tab col)
   (setf linha 17)
   (loop
-    (if (tabuleiro-preenchido-p tab linha col) (return linha)
-        (if (equal linha 0) (decf linha)
-                            (return 0)))))
+    (if (tabuleiro-preenchido-p tab linha col) (return (1+ linha))
+        (if (equal linha 0) (return 0)
+                            (decf linha)))))
 
 (defun tabuleiro-preenche! (tab linha coluna)
   (cond
