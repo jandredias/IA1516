@@ -8,10 +8,10 @@
 (load "tabuleiro.lisp")
 (load (compile-file "utils.lisp"))
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; PROBLEMA ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defstruct PROBLEMA estado-inicial solucao accoes resultado custo-caminho)
 
+;;;;DELETE;;;;DELETE;;;;DELETE;;;;DELETE;;;;DELETE;;;;DELETE;;;;DELETE;;;;DELETE;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DEBUG ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setf tab1 (cria-tabuleiro))
 
@@ -67,7 +67,7 @@ tab1
 (tabuleiro-altura-coluna tab1 1)
 (tabuleiro-altura-coluna tab1 2)
 (tabuleiro-altura-coluna tab1 9)
-(setf array (array-slice tab1 0))
+(setf array (array-slice tab_8_esq 0))
 (tabuleiro-linha-completa-p tab1 0)
 (tabuleiro-topo-preenchido-p tab1)
 ;tabuleiros-iguais tab1 tab1)

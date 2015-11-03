@@ -24,4 +24,5 @@
   )
 )
 
-;(make-estado :pontos 100 :pecas-por-colocar '('i 'j 'l) :pecas-colocadas 5 :tabuleiro (cria-tabuleiro))
+;(setf a (make-estado :pontos 100 :pecas-por-colocar '('i 'j 'l) :pecas-colocadas 5 :tabuleiro (cria-tabuleiro)))
+;(first (estado-pecas-por-colocar a))
