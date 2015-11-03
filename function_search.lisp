@@ -10,7 +10,16 @@
   )
 
 ;; Devolve estado
-(defun resultado (estado accao))
+(defun resultado (estado accao)
+  (setf coluna (accao-coluna accao))
+  (setf peca   (accao-peca accao))
+  (setf peca_array_base (array-slice peca 0))
+  (array-dimension peca_array_base 0)
+;(setf estad (make-estado :pontos 100 :pecas-por-colocar '('i 'j 'l) :pecas-colocadas 5 :tabuleiro (cria-tabuleiro)))
+;(setf accao (cria-accao 5 peca-i0))
+;(resultado estad accao)
+)
+
 
 ;; Devolve inteiro
 (defun qualidade (estado_in)
@@ -21,8 +30,8 @@
 (defun custo-opurtonidade (estado))
 
 
-;; Devolve uma lista com as pecas rodadas
-(defun roda (peca)
+;; Devolve uma lista com as possiveis pecas rodadas
+(defun pecas_possiveis (peca)
   (cond ((equal peca 'i) '(peca-i0 peca-i1))
         ((equal peca 'l) '(peca-l0 peca-l1 peca-l2 peca-l3))
         ((equal peca 'j) '(peca-j0 peca-j1 peca-j2 peca-j3))
