@@ -6,6 +6,7 @@
 (load "estado.lisp")
 (load "function_search.lisp")
 (load "tabuleiro.lisp")
+(load (compile-file "utils.lisp"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; PROBLEMA ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

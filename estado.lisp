@@ -19,9 +19,9 @@
 
 (defun estado-final-p (estado)
   (or
-    (tabuleiro-topo-preenchido-p estado-tabuleiro)
     (null estado-pecas-por-colocar)
+    (tabuleiro-topo-preenchido-p estado-tabuleiro)
   )
 )
 
-;(make-estado :pontos 100 :pecas-por-colocar 20 :pecas-colocadas 5 :tabuleiro (cria-tabuleiro))
+;(make-estado :pontos 100 :pecas-por-colocar '('i 'j 'l) :pecas-colocadas 5 :tabuleiro (cria-tabuleiro))
