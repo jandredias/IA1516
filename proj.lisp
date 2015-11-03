@@ -2,11 +2,12 @@
 ;;; 75741 João Figueiredo
 ;;; 75966 Frederico Moura
 ;;; 78865 Miguel Amaral
+(load "tabuleiro.lisp")
 (load "accao.lisp")
 (load "estado.lisp")
-(load "function_search.lisp")
-(load "tabuleiro.lisp")
+(defun formulacao-problema (a b))
 (load (compile-file "utils.lisp"))
+(load "function_search.lisp")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; PROBLEMA ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defstruct PROBLEMA estado-inicial solucao accoes resultado custo-caminho)
@@ -67,7 +68,7 @@ tab1
 (tabuleiro-altura-coluna tab1 1)
 (tabuleiro-altura-coluna tab1 2)
 (tabuleiro-altura-coluna tab1 9)
-(setf array (array-slice tab_8_esq 0))
+;(setf array (array-slice tab_8_esq 0))
 (tabuleiro-linha-completa-p tab1 0)
 (tabuleiro-topo-preenchido-p tab1)
 ;tabuleiros-iguais tab1 tab1)

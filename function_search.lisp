@@ -10,15 +10,46 @@
   )
 
 ;; Devolve estado
-(defun resultado (estado accao)
-  (setf coluna (accao-coluna accao))
-  (setf peca   (accao-peca accao))
-  (setf peca_array_base (array-slice peca 0))
-  (array-dimension peca_array_base 0)
-;(setf estad (make-estado :pontos 100 :pecas-por-colocar '('i 'j 'l) :pecas-colocadas 5 :tabuleiro (cria-tabuleiro)))
-;(setf accao (cria-accao 5 peca-i0))
-;(resultado estad accao)
-)
+(defun resultado (estado_in accao)
+  (let (( coluna (accao-coluna accao))
+        ( coluna_aux (accao-coluna accao))
+        ( peca   (accao-peca accao))
+        ( max '(0 0)))
+  (setf dimensoes_peca (array-dimensions peca))
+
+  (setf lst '())
+  (print peca)
+  (loop for j from (1- (second dimensoes_peca)) downto 0 do
+    (dotimes (n (first dimensoes_peca))
+        (print (list n j))
+        (when (aref peca n j)(progn (push n lst) (return T)))
+    )
+  )
+  lst
+
+  (setf tabuleiro_criado (copia-tabuleiro (estado-tabuleiro estado_in)))
+
+  (dolist (elem lst max)
+      (print ELEM)
+      (setf valor_calc (- (tabuleiro-altura-coluna tabuleiro_criado coluna_aux) elem))
+      (print valor_calc)
+      (cond ((< (first max) valor_calc) (setf max (list valor_calc coluna_aux))))
+      (incf coluna_aux)
+  )
+
+
+
+  (setf new-points largura_peça)
+
+  (make-estado :pontos new-points
+               :pecas-por-colocar (rest (estado-pecas-por-colocar estado_in))
+               :pecas-colocadas (push (first (estado-pecas-por-colocar estado_in))(estado-pecas-colocadas estado_in))
+               :tabuleiro tabuleiro_criado)))
+
+))
+(setf estad (make-estado :pontos 100 :pecas-por-colocar '('i 'j 'l) :pecas-colocadas '('z) :tabuleiro (cria-tabuleiro)))
+(setf accao (cria-accao 5 peca-z2))
+(resultado estad accao)
 
 
 ;; Devolve inteiro

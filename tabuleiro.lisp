@@ -58,7 +58,7 @@
 
 (defun tabuleiros-iguais-p (tab1 tab2)
   (setf RESULT T)
-  (dotimes (l 18)
+  (dotimes (l 18 RESULT)
     (dotimes (c 10)
       (cond
         ((not (equal (tabuleiro-preenchido-p tab1 l c) (tabuleiro-preenchido-p tab2 l c)))
@@ -67,7 +67,6 @@
       )
     )
   )
-  RESULT
 )
 
 
