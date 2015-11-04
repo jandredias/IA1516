@@ -3,16 +3,39 @@
 ;;; 75966 Frederico Moura
 ;;; 78865 Miguel Amaral
 (load "tabuleiro.lisp")
+;;;;DELETE;;;;DELETE;;;;DELETE;;;;DELETE;;;;DELETE;;;;DELETE;;;;DELETE;;;;DELETE;;;;
+(defun preenche-tudo (tab)
+  (dotimes (i 18 tab)
+    (dotimes (j 10)
+        (tabuleiro-preenche! tab i j)
+    )
+  )
+)
+(setf tab_9_esq (preenche-tudo (cria-tabuleiro)))
+(defun preenche-diagonal (tab)
+  (dotimes (i 18 tab)
+    (dotimes (j 10)
+      (cond ((> j i)
+        (tabuleiro-preenche! tab i j)
+        )
+      )
+    )
+  )
+)
+(setf tab_8_esq (preenche-diagonal (cria-tabuleiro)))
+tab_8_esq
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (load "accao.lisp")
 (load "estado.lisp")
 (defun formulacao-problema (a b))
 (load (compile-file "utils.lisp"))
 (load "function_search.lisp")
 
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; PROBLEMA ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defstruct PROBLEMA estado-inicial solucao accoes resultado custo-caminho)
 
-;;;;DELETE;;;;DELETE;;;;DELETE;;;;DELETE;;;;DELETE;;;;DELETE;;;;DELETE;;;;DELETE;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DEBUG ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setf tab1 (cria-tabuleiro))
 
@@ -73,23 +96,3 @@ tab1
 (tabuleiro-topo-preenchido-p tab1)
 ;tabuleiros-iguais tab1 tab1)
 (setf tab2 (copia-tabuleiro tab1))
-(defun preenche-tudo (tab)
-  (dotimes (i 18 tab)
-    (dotimes (j 10)
-        (tabuleiro-preenche! tab i j)
-    )
-  )
-)
-(setf tab_9_esq (preenche-tudo (cria-tabuleiro)))
-(defun preenche-diagonal (tab)
-  (dotimes (i 18 tab)
-    (dotimes (j 10)
-      (cond ((> j i)
-        (tabuleiro-preenche! tab i j)
-        )
-      )
-    )
-  )
-)
-(setf tab_8_esq (preenche-diagonal (cria-tabuleiro)))
-tab_8_esq

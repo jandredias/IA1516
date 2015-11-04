@@ -16,7 +16,7 @@
         ( peca   (accao-peca accao))
         )
   (print accao)
-  (print '() )
+  (format t "~%")
   (setf dimensoes_peca (array-dimensions peca))
   (setf max (list 0 coluna))
   (setf lst_contorno_peca '())
@@ -25,21 +25,21 @@
         (when (aref peca n j)(progn (push n lst_contorno_peca) (return T)))
     )
   )
-  lst_contorno_peca
-
+  ;; Copiar tabuleiro novo
   (setf tabuleiro_criado (copia-tabuleiro (estado-tabuleiro estado_in)))
 
-
+  ;; Calcular posicao de escrita
   (dolist (elem lst_contorno_peca max)
-
       (setf valor_calc (- (tabuleiro-altura-coluna tabuleiro_criado coluna_aux) elem))
       (cond ((< (first max) valor_calc) (setf max (list valor_calc coluna_aux))))
 
-      (incf coluna_aux)
-  )
+      (incf coluna_aux))
+
   (setf difference (- (second max) coluna))
   (setf base_writing_x (- (first max) (nth difference lst_contorno_peca)))
   (setf base_writing_y coluna)
+
+  ;;Colocar peca no tabuleiro
   (dotimes (n (first dimensoes_peca))
     (setf writing_x (+ base_writing_x N))
     (dotimes (i (second dimensoes_peca))
@@ -49,20 +49,64 @@
       )
     )
   )
+  ;;Verificar se perdeu o jogo
+  (if (tabuleiro-topo-preenchido-p tabuleiro_criado) () ;;perdeu o jogo
+                ;;else verificar linhas preenchidas
+                (progn
+                (print 'base_writing_x)
+                (print base_writing_x)
+                (print 'writing_x)
+                (print writing_x)
+                (setf real_cut base_writing_x)
+                (loop for aux from base_writing_x to writing_x do
+                      (progn
+                          (print 'aux)
+                          (print aux)
+                          (print 'real_cut)
+                          (print real_cut)
+                          (if (tabuleiro-linha-completa-p tabuleiro_criado aux)
+                                (tabuleiro-remove-linha! tabuleiro_criado real_cut)
+                                (incf real_cut))
+                      )
+                ))
+  )
+  (setf dif_linhas (- aux real_cut))
+  ;;(setf old-points (estado-pontos estado_in))
+  (format t "~%")
+  ;;;;(cond
+  ;;;;        ((= dif_linhas 0) T)
+  ;;;;        ((= dif_linhas 1) (setf new-points (+ old-points 100)) )
+  ;;;;        ((= dif_linhas 2) (setf new-points (+ old-points 300)) )
+  ;;;;        ((= dif_linhas 3) (setf new-points (+ old-points 500)) )
+  ;;;;        ((= dif_linhas 4) (setf new-points (+ old-points 800)) )
+  ;;;; )
 
 
-
-  (setf new-points 50)
-
+  ;; Criar novo estado + atualizar listas
   (make-estado :pontos new-points
                :pecas-por-colocar (rest (estado-pecas-por-colocar estado_in))
                :pecas-colocadas (push (first (estado-pecas-por-colocar estado_in))(estado-pecas-colocadas estado_in))
                :tabuleiro tabuleiro_criado)
-  ))
-
-(setf estad (make-estado :pontos 100 :pecas-por-colocar '('i 'j 'l) :pecas-colocadas '('z) :tabuleiro (cria-tabuleiro)))
-(setf accao (cria-accao 5 peca-j2))
-(desenha-estado (resultado estad accao))
+))
+(setf tab_testes  (preenche-diagonal(cria-tabuleiro)))
+(tabuleiro-preenche! tab_testes 6 1)
+(setf estad (make-estado :pontos 0 :pecas-por-colocar '('i 'i) :pecas-colocadas '('z) :tabuleiro tab_testes ))
+(setf accao1 (cria-accao 0 peca-i1))
+(setf accao2 (cria-accao 4 peca-l3))
+(setf accao3 (cria-accao 4 peca-l0))
+(setf accao4 (cria-accao 5 peca-o0))
+(setf accao5 (cria-accao 0 peca-o0))
+(setf accao6 (cria-accao 2 peca-o0))
+(setf accao7 (cria-accao 8 peca-z1))
+(setf accao8 (cria-accao 7 peca-i0))
+(setf estad2 (resultado estad accao1))
+(setf estad3 (resultado estad2 accao2))
+(setf estad4 (resultado estad3 accao3))
+(setf estad5 (resultado estad4 accao4))
+(setf estad6 (resultado estad5 accao5))
+(setf estad7 (resultado estad6 accao6))
+(setf estad8 (resultado estad7 accao7))
+(desenha-estado (resultado estad8 accao8))
 
 
 ;; Devolve inteiro

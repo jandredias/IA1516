@@ -82,6 +82,7 @@
           )
       )
   )
+  ;; Acho que ela ja esta vazia anyway... porque se tivermos preenchido ai perdemos o jogo
   ;; A linha de cima (17) tem de passar a ser vazia caso nao seja
   (dotimes (c 10)
     (setf (aref tab 17 c) NIL)
