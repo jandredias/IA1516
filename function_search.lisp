@@ -14,41 +14,61 @@
   (let (( coluna (accao-coluna accao))
         ( coluna_aux (accao-coluna accao))
         ( peca   (accao-peca accao))
-        ( max '(0 0)))
+        )
   (setf dimensoes_peca (array-dimensions peca))
-
-  (setf lst '())
+  (setf max (list 0 coluna))
+  (setf lst_contorno_peca '())
   (print peca)
   (loop for j from (1- (second dimensoes_peca)) downto 0 do
     (dotimes (n (first dimensoes_peca))
-        (print (list n j))
-        (when (aref peca n j)(progn (push n lst) (return T)))
+        (when (aref peca n j)(progn (push n lst_contorno_peca) (return T)))
     )
   )
-  lst
+  lst_contorno_peca
 
   (setf tabuleiro_criado (copia-tabuleiro (estado-tabuleiro estado_in)))
 
-  (dolist (elem lst max)
+  (print 'max)
+  (print max)
+  (dolist (elem lst_contorno_peca max)
+      (print 'ELEM)
       (print ELEM)
+      (print 'coluna_aux)
+      (print coluna_aux)
       (setf valor_calc (- (tabuleiro-altura-coluna tabuleiro_criado coluna_aux) elem))
+      (print 'valor_calc)
       (print valor_calc)
       (cond ((< (first max) valor_calc) (setf max (list valor_calc coluna_aux))))
+      (print 'max)
+      (print max)
       (incf coluna_aux)
+  )
+  (setf difference (- (second max) coluna))
+  (print 'here)
+  (print difference)
+  (setf base_writing_y (- (first max) (nth difference lst_contorno_peca)))
+  (print 'here21321)
+  (setf base_writing_x coluna)
+  (dotimes (i (first dimensoes_peca))
+    (setf writing_x (+ base_writing_x i))
+    (dotimes (n (second dimensoes_peca))
+      (setf writing_y (+ base_writing_y n))
+      (cond ((aref peca i n) (tabuleiro-preenche! tabuleiro_criado writing_x writing_y))
+      )
+    )
   )
 
 
 
-  (setf new-points largura_peça)
+  (setf new-points 50)
 
   (make-estado :pontos new-points
                :pecas-por-colocar (rest (estado-pecas-por-colocar estado_in))
                :pecas-colocadas (push (first (estado-pecas-por-colocar estado_in))(estado-pecas-colocadas estado_in))
                :tabuleiro tabuleiro_criado)))
 
-))
 (setf estad (make-estado :pontos 100 :pecas-por-colocar '('i 'j 'l) :pecas-colocadas '('z) :tabuleiro (cria-tabuleiro)))
-(setf accao (cria-accao 5 peca-z2))
+(setf accao (cria-accao 5 peca-j2))
 (resultado estad accao)
 
 
