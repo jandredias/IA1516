@@ -5,9 +5,13 @@
   (and (not (tabuleiro-topo-preenchido-p estado-tabuleiro))
        (null estado-pecas-por-colocar)))
 
-;; Devolve lista accoes
-(defun accoes (estado)
-  )
+;; Devolve lista accoes: estado
+(defun accoes ()
+  (setf lista '())
+   (dolist (el (pecas_possiveis 'i))
+      (dotimes (k (- 10 (array-dimension el 1)))
+               (append '(k) lista)))
+   lista)
 
 ;; Devolve estado
 (defun resultado (estado_in accao)
@@ -60,9 +64,9 @@
                :tabuleiro tabuleiro_criado)
   ))
 
-(setf estad (make-estado :pontos 100 :pecas-por-colocar '('i 'j 'l) :pecas-colocadas '('z) :tabuleiro (cria-tabuleiro)))
-(setf accao (cria-accao 5 peca-j2))
-(desenha-estado (resultado estad accao))
+;(setf estad (make-estado :pontos 100 :pecas-por-colocar '('i 'j 'l) :pecas-colocadas '('z) :tabuleiro (cria-tabuleiro)))
+;(setf accao (cria-accao 5 peca-j2))
+;(desenha-estado (resultado estad accao))
 
 
 ;; Devolve inteiro
