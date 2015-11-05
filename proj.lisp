@@ -157,9 +157,8 @@
         ( coluna_aux (accao-coluna accao))
         ( peca   (accao-peca accao))
         ( dimensoes_peca (array-dimensions peca))
-        ( max (list 0 coluna))
+        ( max -10)
         ( lst_contorno_peca '())
-        ( difference 0)
         ( base_writing_x 0)
         ( base_writing_y 0)
         ( writing_x 0)
@@ -172,6 +171,7 @@
         ;; Copiar tabuleiro novo
         ( tabuleiro_criado (copia-tabuleiro (estado-tabuleiro estado_in)) ))
 
+  ;; Cria lista com alturas da peca
   (loop for j from (1- (second dimensoes_peca)) downto 0 do
     (dotimes (n (first dimensoes_peca))
         (when (aref peca n j)(progn (push n lst_contorno_peca) (return T)))
@@ -181,18 +181,13 @@
   ;; Calcular posicao de escrita
   (dolist (elem lst_contorno_peca max)
       (setf valor_calc (- (tabuleiro-altura-coluna tabuleiro_criado coluna_aux) elem))
-      (cond ((< (first max) valor_calc) (setf max (list valor_calc coluna_aux))))
 
+      (cond ((< max valor_calc) (setf max valor_calc )))
       (incf coluna_aux))
 
-  (print max)
-  (print 'max)
-  (print 'difference)
-  (print (- (second max) coluna))
-  (print 'base_writing_x)
-  (print (- (first max) (nth difference lst_contorno_peca)))
-  (setf difference (- (second max) coluna))
-  (setf base_writing_x (- (first max) (nth difference lst_contorno_peca)))
+
+
+  (setf base_writing_x max)
   (setf base_writing_y coluna)
 
   ;;Colocar peca no tabuleiro
