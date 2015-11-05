@@ -37,9 +37,9 @@
 (setf accao13 (cria-accao 7 peca-z1))
 (setf accao14 (cria-accao 7 peca-z1))
 (setf accao15 (cria-accao 9 peca-i0))
-(setf accao16 (cria-accao 0 peca-i0))
-(setf accao17 (cria-accao 0 peca-i0))
-(setf accao18 (cria-accao 0 peca-i0))
+(setf accao16 (cria-accao 9 peca-i0))
+(setf accao17 (cria-accao 9 peca-i0))
+(setf accao18 (cria-accao 9 peca-i0))
 (setf accao19 (cria-accao 1 peca-z1))
 (setf accao20 (cria-accao 3 peca-z1))
 (setf accao21 (cria-accao 5 peca-z1))
@@ -76,17 +76,36 @@
 (setf estad9 (resultado estad8 accao8))
 (setf estad10 (resultado estad9 accao9))
 (setf estad11 (resultado estad10 accao10))
+(setf estad12 (resultado estad11 accao11))
+(setf estad13 (resultado estad12 accao12))
+(setf estad14 (resultado estad13 accao13))
+(setf estad15 (resultado estad14 accao14))
+(print '16)
+(setf estad16 (resultado estad15 accao15))
+(print '17)
+(setf estad17 (resultado estad16 accao16))
+(print '18)
+(print estad17)
+(print accao17)
+(setf estad18 (resultado estad17 accao17))
+(print '19)
+(setf estad19 (resultado estad18 accao18))
+(print '20)
+(setf estad20 (resultado estad19 accao19))
 (desenha-estado (resultado estad10 accao10))
 (print 'opurtonidade)
-(print (custo-opurtonidade estad11))
+(print (custo-oportunidade estad11))
 ;(desenha-estado (resultado estad11 accao11))
 ;(desenha-estado (resultado estad7 accao7))
 (setf tab_8_esq (preenche-diagonal (cria-tabuleiro)))
-tab_8_esq
+
+(print (accoes (make-estado :pontos 0 :pecas-por-colocar '(i) :pecas-colocadas (list) :tabuleiro (cria-tabuleiro) )))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;; Testar Resultado ,;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;(executa-jogadas estado-inicial lista-accoes)
+(executa-jogadas estado-inicial lista-accoes)
 ;;;;;;;;;;;;;;;;;;;;;;;; Testar Resultado ,;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 
 

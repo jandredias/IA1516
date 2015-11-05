@@ -1,4 +1,4 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;; Funçoes do problema de procura 2.2.1 ;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;; Funcoes do problema de procura 2.2.1 ;;;;;;;;;;;;;;;;
 ;;PECAS: I J L O S Z T
 ;; Devolve logico
 (defun solucao (estado)
@@ -6,11 +6,11 @@
        (null (estado-pecas-por-colocar estado))))
 
 ;; Devolve lista accoes: estado
-(defun accoes ()
-  (setf lista '())
-   (dolist (el (pecas_possiveis 'i))
-      (dotimes (k (- 10 (array-dimension el 1)))
-               (append '(k) lista)))
+(defun accoes (estado_in)
+  (setf lista (list))
+   (dolist (el (pecas_possiveis (first estado-pecas-por-colocar estado_in)))
+      (loop for k from (- 10 (array-dimension el 1)) downto 0
+      do (push (cria-accao k el) lista)))
    lista)
 
 ;; Devolve estado
@@ -94,39 +94,33 @@
 )
 
 ;; Devolve inteiro
-(defun custo-opurtonidade (estado_in)
+(defun custo-oportunidade (estado_in)
   (let ((lista_colocadas (estado-pecas-colocadas estado_in))
-        (valor_opurtonidade 0)
+        (valor_oportunidade 0)
         (valor_real (estado-pontos estado_in)))
 
-      ;;Calcular valor_opurtonidade
+      ;;Calcular valor_oportunidade
       (dolist (elem lista_colocadas)
         (
         progn
-        (cond ((eq elem 'I) (incf valor_opurtonidade 800))
-              ((eq elem 'J) (incf valor_opurtonidade 500))
-              ((eq elem 'L) (incf valor_opurtonidade 500))
-              ((eq elem 'S) (incf valor_opurtonidade 300))
-              ((eq elem 'Z) (incf valor_opurtonidade 300))
-              ((eq elem 'T) (incf valor_opurtonidade 300))
-              ((eq elem 'O) (incf valor_opurtonidade 300))))
-        (print elem)
-        (print valor_opurtonidade)
+        (cond ((eq elem 'I) (incf valor_oportunidade 800))
+              ((eq elem 'J) (incf valor_oportunidade 500))
+              ((eq elem 'L) (incf valor_oportunidade 500))
+              ((eq elem 'S) (incf valor_oportunidade 300))
+              ((eq elem 'Z) (incf valor_oportunidade 300))
+              ((eq elem 'T) (incf valor_oportunidade 300))
+              ((eq elem 'O) (incf valor_oportunidade 300))))
       )
-      (print 'valor_opurtonidadE)
-      (print valor_opurtonidadE)
-      (print 'valor_real)
-      (print valor_real)
-      (- valor_opurtonidade valor_real)))
+      (- valor_oportunidade valor_real)))
 
 
 ;; Devolve uma lista com as possiveis pecas rodadas
 (defun pecas_possiveis (peca)
-  (cond ((equal peca 'i) '(peca-i0 peca-i1))
-        ((equal peca 'l) '(peca-l0 peca-l1 peca-l2 peca-l3))
-        ((equal peca 'j) '(peca-j0 peca-j1 peca-j2 peca-j3))
-        ((equal peca 'o) '(peca-o0))
-        ((equal peca 's) '(peca-s0 peca-s1))
-        ((equal peca 'z) '(peca-z0 peca-z1))
-        ((equal peca 't) '(peca-t0 peca-t1 peca-t2 peca-t3))
+  (cond ((equal peca 'i) (list peca-i1 peca-i0))
+        ((equal peca 'l) (list peca-l3 peca-l2 peca-l1 peca-l0))
+        ((equal peca 'j) (list peca-j3 peca-j2 peca-j1 peca-j0))
+        ((equal peca 'o) (list peca-o0))
+        ((equal peca 's) (list peca-s1 peca-s0))
+        ((equal peca 'z) (list peca-z1 peca-z0))
+        ((equal peca 't) (list peca-t3 peca-t2 peca-t1 peca-t0))
   ))

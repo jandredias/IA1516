@@ -33,11 +33,9 @@
                             (decf linha))))))
 
 (defun tabuleiro-preenche! (tab linha coluna)
-  (cond
-    ( ;; If Condition
-      (and (>= linha 0) (<= linha 17) (>= coluna 0) (<= coluna 9) )
-        ;; Then
-        (setf (aref tab linha coluna) T))))
+  (cond ((and (>= linha 0) (<= linha 17) (>= coluna 0) (<= coluna 9))
+            (setf (aref tab linha coluna) T))
+        (t t)))
 
 
 (defun tabuleiro-linha-completa-p (tab linha)
@@ -123,10 +121,10 @@
 )
 (defun estados-iguais-p (estado1 estado2)
     (and
-  	 (equal (estado-pontos estado1) (estado-pontos estado2))
-  	 (equal (estado-pecas-por-colocar estado1) (estado-pecas-por-colocar estado2))
-  	 (equal (estado-pecas-colocadas estado1) (estado-pecas-colocadas estado2))
-  	 (equal (estado-tabuleiro estado1) (estado-tabuleiro estado2))))
+  	 (eq (estado-pontos estado1) (estado-pontos estado2))
+  	 (eq (estado-pecas-por-colocar estado1) (estado-pecas-por-colocar estado2))
+  	 (eq (estado-pecas-colocadas estado1) (estado-pecas-colocadas estado2))
+  	 (eq (estado-tabuleiro estado1) (estado-tabuleiro estado2))))
 
 (defun estado-final-p (estado)
   (or
@@ -187,6 +185,12 @@
 
       (incf coluna_aux))
 
+  (print max)
+  (print 'max)
+  (print 'difference)
+  (print (- (second max) coluna))
+  (print 'base_writing_x)
+  (print (- (first max) (nth difference lst_contorno_peca)))
   (setf difference (- (second max) coluna))
   (setf base_writing_x (- (first max) (nth difference lst_contorno_peca)))
   (setf base_writing_y coluna)
@@ -196,40 +200,34 @@
     (setf writing_x (+ base_writing_x N))
     (dotimes (i (second dimensoes_peca))
       (setf writing_y (+ base_writing_y i))
-
       (cond ((aref peca n i) (tabuleiro-preenche! tabuleiro_criado writing_x writing_y))
       )
     )
   )
-  ;;Verificar se perdeu o jogo
-  (if (tabuleiro-topo-preenchido-p tabuleiro_criado) () ;;perdeu o jogo
-                ;;else verificar linhas preenchidas
-                (progn
-                (setf real_cut base_writing_x)
-                (setf max 0)
-                (loop for aux from base_writing_x to (1+ writing_x) do
-                      (progn
-                          (setf max aux)
-                          (if (tabuleiro-linha-completa-p tabuleiro_criado real_cut)
-                                (tabuleiro-remove-linha! tabuleiro_criado real_cut)
-                                (incf real_cut))
-                      )
 
-                )
-                (decf real_cut)
-                )
-  )
-  (setf dif_linhas (- max real_cut))
   (setf new-points (estado-pontos estado_in))
-  (cond
-      ((= dif_linhas 0) T)
-      ((= dif_linhas 1) (setf new-points (+ new-points 100)) )
-      ((= dif_linhas 2) (setf new-points (+ new-points 300)) )
-      ((= dif_linhas 3) (setf new-points (+ new-points 500)) )
-      ((= dif_linhas 4) (setf new-points (+ new-points 800)) )
-   )
 
-
+  ;;Verificar se perdeu o jogo
+  (if (< writing_x 18)
+    ;;Remover linhas preenchidas caso nao tenha perdido
+    (progn
+    (setf real_cut base_writing_x)
+    (setf max 0)
+    (loop for aux from base_writing_x to (1+ writing_x) do
+          (progn
+              (setf max aux)
+              (if (tabuleiro-linha-completa-p tabuleiro_criado real_cut)
+                    (tabuleiro-remove-linha! tabuleiro_criado real_cut)
+                    (incf real_cut))))
+    (decf real_cut)
+    (setf dif_linhas (- max real_cut))
+    (cond
+        ((= dif_linhas 0) T)
+        ((= dif_linhas 1) (setf new-points (+ new-points 100)) )
+        ((= dif_linhas 2) (setf new-points (+ new-points 300)) )
+        ((= dif_linhas 3) (setf new-points (+ new-points 500)) )
+        ((= dif_linhas 4) (setf new-points (+ new-points 800)) )))
+  T)
   ;; Criar novo estado + atualizar listas
   (make-estado :pontos new-points
                :pecas-por-colocar (rest (estado-pecas-por-colocar estado_in))
