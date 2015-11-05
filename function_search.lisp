@@ -3,7 +3,7 @@
 ;; Devolve logico
 (defun solucao (estado)
   (and (not (tabuleiro-topo-preenchido-p estado-tabuleiro))
-       (null estado-pecas-por-colocar)))
+       (null (estado-pecas-por-colocar estado))))
 
 ;; Devolve lista accoes: estado
 (defun accoes ()
@@ -19,8 +19,6 @@
         ( coluna_aux (accao-coluna accao))
         ( peca   (accao-peca accao))
         )
-  (print accao)
-  (print '() )
   (setf dimensoes_peca (array-dimensions peca))
   (setf max (list 0 coluna))
   (setf lst_contorno_peca '())
@@ -29,21 +27,21 @@
         (when (aref peca n j)(progn (push n lst_contorno_peca) (return T)))
     )
   )
-  lst_contorno_peca
-
+  ;; Copiar tabuleiro novo
   (setf tabuleiro_criado (copia-tabuleiro (estado-tabuleiro estado_in)))
 
-
+  ;; Calcular posicao de escrita
   (dolist (elem lst_contorno_peca max)
-
       (setf valor_calc (- (tabuleiro-altura-coluna tabuleiro_criado coluna_aux) elem))
       (cond ((< (first max) valor_calc) (setf max (list valor_calc coluna_aux))))
 
-      (incf coluna_aux)
-  )
+      (incf coluna_aux))
+
   (setf difference (- (second max) coluna))
   (setf base_writing_x (- (first max) (nth difference lst_contorno_peca)))
   (setf base_writing_y coluna)
+
+  ;;Colocar peca no tabuleiro
   (dotimes (n (first dimensoes_peca))
     (setf writing_x (+ base_writing_x N))
     (dotimes (i (second dimensoes_peca))
@@ -53,20 +51,41 @@
       )
     )
   )
+  ;;Verificar se perdeu o jogo
+  (if (tabuleiro-topo-preenchido-p tabuleiro_criado) () ;;perdeu o jogo
+                ;;else verificar linhas preenchidas
+                (progn
+                (setf real_cut base_writing_x)
+                (setf max 0)
+                (loop for aux from base_writing_x to (1+ writing_x) do
+                      (progn
+                          (setf max aux)
+                          (if (tabuleiro-linha-completa-p tabuleiro_criado real_cut)
+                                (tabuleiro-remove-linha! tabuleiro_criado real_cut)
+                                (incf real_cut))
+                      )
+
+                )
+                (decf real_cut)
+                )
+  )
+  (setf dif_linhas (- max real_cut))
+  (setf new-points (estado-pontos estado_in))
+  (cond
+      ((= dif_linhas 0) T)
+      ((= dif_linhas 1) (setf new-points (+ new-points 100)) )
+      ((= dif_linhas 2) (setf new-points (+ new-points 300)) )
+      ((= dif_linhas 3) (setf new-points (+ new-points 500)) )
+      ((= dif_linhas 4) (setf new-points (+ new-points 800)) )
+   )
 
 
-
-  (setf new-points 50)
-
+  ;; Criar novo estado + atualizar listas
   (make-estado :pontos new-points
                :pecas-por-colocar (rest (estado-pecas-por-colocar estado_in))
                :pecas-colocadas (push (first (estado-pecas-por-colocar estado_in))(estado-pecas-colocadas estado_in))
                :tabuleiro tabuleiro_criado)
-  ))
-
-;(setf estad (make-estado :pontos 100 :pecas-por-colocar '('i 'j 'l) :pecas-colocadas '('z) :tabuleiro (cria-tabuleiro)))
-;(setf accao (cria-accao 5 peca-j2))
-;(desenha-estado (resultado estad accao))
+))
 
 
 ;; Devolve inteiro
@@ -75,7 +94,30 @@
 )
 
 ;; Devolve inteiro
-(defun custo-opurtonidade (estado))
+(defun custo-opurtonidade (estado_in)
+  (let ((lista_colocadas (estado-pecas-colocadas estado_in))
+        (valor_opurtonidade 0)
+        (valor_real (estado-pontos estado_in)))
+
+      ;;Calcular valor_opurtonidade
+      (dolist (elem lista_colocadas)
+        (
+        progn
+        (cond ((eq elem 'I) (incf valor_opurtonidade 800))
+              ((eq elem 'J) (incf valor_opurtonidade 500))
+              ((eq elem 'L) (incf valor_opurtonidade 500))
+              ((eq elem 'S) (incf valor_opurtonidade 300))
+              ((eq elem 'Z) (incf valor_opurtonidade 300))
+              ((eq elem 'T) (incf valor_opurtonidade 300))
+              ((eq elem 'O) (incf valor_opurtonidade 300))))
+        (print elem)
+        (print valor_opurtonidade)
+      )
+      (print 'valor_opurtonidadE)
+      (print valor_opurtonidadE)
+      (print 'valor_real)
+      (print valor_real)
+      (- valor_opurtonidade valor_real)))
 
 
 ;; Devolve uma lista com as possiveis pecas rodadas

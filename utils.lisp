@@ -91,7 +91,9 @@
     (desenha-linha-exterior) (format T "  Pontuacao:~A~%" (estado-pontos estado))
     (do ((linha 16 (- linha 1))) ((< linha 0))
       (desenha-linha tabuleiro linha) (format T "~%"))
-    (desenha-linha-exterior)))
+    (format T "~c[37m" #\ESC)
+    (desenha-linha-exterior)
+    (format T "~c[0m" #\ESC)))
 
 ;;; desenha-linha-accao: accao x inteiro --> {}
 ;;; dada uma accao e um inteiro correspondente a uma linha que esta por cima do tabuleiro (linhas 18,19,20,21) desenha
@@ -128,10 +130,10 @@
 ;;; e desenha a linha no ecra, colocando o simbolo "#" por cada posicao preenchida,
 ;;; e um espaco em branco por cada posicao nao preenchida. Nao devolve nada.
 (defun desenha-linha (tabuleiro linha)
-  (format T "| ")
+  (format T "~c[37m| ~c[36m" #\ESC #\ESC)
   (dotimes (coluna 10)
     (format T "~A " (if (tabuleiro-preenchido-p tabuleiro linha coluna) "#" " ")))
-  (format T "|"))
+  (format T "~c[37m|~c[0m" #\ESC #\ESC))
 
 
 ;;exemplo muito simples de um tabuleiro com a primeira e segunda linha quase todas preenchidas
