@@ -57,7 +57,7 @@
 )
 
 (defun tabuleiros-iguais-p (tab1 tab2)
-  (setf RESULT T)
+  (let ((RESULT T))
   (dotimes (l 18 RESULT)
     (dotimes (c 10)
       (cond
@@ -66,7 +66,7 @@
         )
       )
     )
-  )
+  ))
 )
 
 

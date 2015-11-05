@@ -10,19 +10,12 @@
 )
 (defun estados-iguais-p (estado1 estado2)
     (and
-	 (equal estado1-pontos estado2-pontos)
-	 (equal estado1-pecas-por-colocar estado2-pecas-por-colocar)
-	 (equal estado1-pecas-colocadas estado2-pecas-colocadas)
-	 (equal estado1-tabuleiro estado2-tabuleiro)
-    )
-)
+  	 (equal estado1-pontos estado2-pontos)
+  	 (equal estado1-pecas-por-colocar estado2-pecas-por-colocar)
+  	 (equal estado1-pecas-colocadas estado2-pecas-colocadas)
+  	 (equal estado1-tabuleiro estado2-tabuleiro)))
 
 (defun estado-final-p (estado)
   (or
-    (null estado-pecas-por-colocar)
-    (tabuleiro-topo-preenchido-p estado-tabuleiro)
-  )
-)
-
-;(setf a (make-estado :pontos 100 :pecas-por-colocar '('i 'j 'l) :pecas-colocadas 5 :tabuleiro (cria-tabuleiro)))
-;(first (estado-pecas-por-colocar a))
+    (null (estado-pecas-por-colocar estado))
+    (tabuleiro-topo-preenchido-p (estado-tabuleiro estado))))
