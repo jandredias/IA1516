@@ -3,7 +3,6 @@
 ;;; 75966 Frederico Moura
 ;;; 78865 Miguel Amaral
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; TABULEIRO ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -84,8 +83,6 @@
   (copia-tabuleiro tab))
 (defun array->tabuleiro (array)
   (copia-tabuleiro array))
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ACCAO ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -103,7 +100,6 @@
 (defun accao-peca (accao)
   (cdr accao)
 )
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ESTADO ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -121,16 +117,15 @@
 )
 (defun estados-iguais-p (estado1 estado2)
     (and
-  	 (eq (estado-pontos estado1) (estado-pontos estado2))
-  	 (eq (estado-pecas-por-colocar estado1) (estado-pecas-por-colocar estado2))
-  	 (eq (estado-pecas-colocadas estado1) (estado-pecas-colocadas estado2))
-  	 (eq (estado-tabuleiro estado1) (estado-tabuleiro estado2))))
+  	 (equal (estado-pontos estado1) (estado-pontos estado2))
+  	 (equal (estado-pecas-por-colocar estado1) (estado-pecas-por-colocar estado2))
+  	 (equal (estado-pecas-colocadas estado1) (estado-pecas-colocadas estado2))
+  	 (tabuleiros-iguais-p (estado-tabuleiro estado1) (estado-tabuleiro estado2))))
 
 (defun estado-final-p (estado)
   (or
     (null (estado-pecas-por-colocar estado))
     (tabuleiro-topo-preenchido-p (estado-tabuleiro estado))))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;; Funcoes do problema de procura 2.2.1 ;;;;;;;;;;;;;;;;
@@ -281,22 +276,13 @@
                                 (make-array (list 2 3) :initial-contents '((T T T)(nil T nil)))
         ))
   ))
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; PROBLEMA ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defstruct PROBLEMA estado-inicial solucao accoes resultado custo-caminho)
+(load (compile-file "utils.lisp"))
+;(load "utils.fas")
 
-;(load "tabuleiro.lisp")
-;(load "accao.lisp")
-;(load "estado.lisp")
-;(defun formulacao-problema (a b))
-;(load "function_search.lisp")
-;(load (compile-file "utils.lisp"))
-(load "utils.fas")
-;(load "debug.lisp")
-
-
-
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DEBUG ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(load "debug.lisp")
