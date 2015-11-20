@@ -7,12 +7,12 @@ Neste projecto pretende-se implementar um algoritmo de procura capaz de jogar um
 
 O tabuleiro do jogo é constituído por 10 colunas e 18 linhas. As linhas estão numeradas de 0 a 17, e as colunas de 0 a 9. Cada posição do tabuleiro pode estar vazia ou ocupada. Assim que uma peça é colocada sobre o tabuleiro, se existir alguma posição ocupada na linha 17 o jogo termina. Caso Peças por colocar contrário, todas as linhas que estejam completas[1] são removidas e o jogador ganha o seguinte número de pontos em função do número de linhas removidas:
 
-Linhas | Pontos
----------------
-     1 | 100
-     2 | 300
-     3 | 500
-     4 | 800
+| Linhas | Pontos |
+|-----------------|
+|     1  | 100    |
+|     2  | 300    |
+|     3  | 500    |
+|     4  | 800    |
 
 Quando uma linha é removida, as linhas superiores a essa linha deverão descer como se vê na figura seguinte.
 
