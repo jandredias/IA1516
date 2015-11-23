@@ -21,22 +21,22 @@
 ;; Devolve estado
 (defun resultado (estado_in accao)
   (let* (( coluna (accao-coluna accao))
-        ( coluna_aux (accao-coluna accao))
-        ( peca   (accao-peca accao))
-        ( dimensoes_peca (array-dimensions peca))
-        ( max -10)
-        ( lst_contorno_peca '())
-        ( base_writing_x 0)
-        ( base_writing_y 0)
-        ( writing_x 0)
-        ( writing_y 0)
-        ( valor_calc 0)
-        ( real_cut 0)
-        ( dif_linhas 0)
-        ( new-points 0)
+         ( coluna_aux (accao-coluna accao))
+         ( peca   (accao-peca accao))
+         ( dimensoes_peca (array-dimensions peca))
+         ( max -10)
+         ( lst_contorno_peca '())
+         ( base_writing_x 0)
+         ( base_writing_y 0)
+         ( writing_x 0)
+         ( writing_y 0)
+         ( valor_calc 0)
+         ( real_cut 0)
+         ( dif_linhas 0)
+         ( new-points 0)
 
-        ;; Copiar tabuleiro novo
-        ( tabuleiro_criado (copia-tabuleiro (estado-tabuleiro estado_in)) ))
+         ;; Copiar tabuleiro novo
+         ( tabuleiro_criado (copia-tabuleiro (estado-tabuleiro estado_in)) ))
 
   ;; Cria lista com alturas da peca
   (loop for j from (1- (second dimensoes_peca)) downto 0 do
@@ -69,8 +69,8 @@
 
   (setf new-points (estado-pontos estado_in))
 
-  ;;Verificar se perdeu o jogo
-  (if (< writing_x 18)
+  ;;Verificar se nao perdeu o jogo
+  (if (and (< writing_x 18) (not (tabuleiro-topo-preenchido-p tabuleiro_criado)))
     ;;Remover linhas preenchidas caso nao tenha perdido
     (progn
     (setf real_cut base_writing_x)
@@ -94,8 +94,7 @@
   (make-estado :pontos new-points
                :pecas-por-colocar (rest (estado-pecas-por-colocar estado_in))
                :pecas-colocadas (push (first (estado-pecas-por-colocar estado_in))(estado-pecas-colocadas estado_in))
-               :tabuleiro tabuleiro_criado)
-))
+               :tabuleiro tabuleiro_criado)))
 
 
 ;; Devolve inteiro
