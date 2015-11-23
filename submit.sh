@@ -5,6 +5,7 @@ cat accao.lisp >> proj.lisp
 cat estado.lisp >> proj.lisp
 cat function_search.lisp >> proj.lisp
 cat problema.lisp >> proj.lisp
+cat procuras.lisp >> proj.lisp
 cat loader.lisp >> proj.lisp
 
 
