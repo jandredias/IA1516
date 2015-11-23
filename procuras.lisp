@@ -13,9 +13,10 @@
   (let ((estado      (problema-estado-inicial problema_in))
         (fun_solucao (problema-solucao problema_in))
         (fun_accoes  (problema-accoes problema_in))
-        (resultado   (problema-resultado problema_in)))
+        (fun_resultado   (problema-resultado problema_in)))
   #| Do work |#
-  (cond (funcall)
+  (if (not (funcall fun_solucao estado))
+      #|(implement )|#
   )
   )
 )
