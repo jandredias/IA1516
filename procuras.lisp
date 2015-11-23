@@ -25,8 +25,8 @@
                                              :accoes function_accoes
                                              :resultado function_resultado
                                              :custo-caminho (problema-custo-caminho problema_in))
-        (setf accoes (procura-pp proximoProblema))
-        (if (listp accoes) (return (push proxima_accao accoes))))))))
+        (setf accoesa (procura-pp proximoProblema))
+        (if (listp accoesa) (return (push proxima_accao accoes))))))))
 
 #|(defstruct PROBLEMA estado-inicial solucao accoes resultado custo-caminho)
  => estado-inicial – contem o estado inicial do problema de procura;
