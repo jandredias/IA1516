@@ -4,32 +4,61 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;; cria-tabuleiro: {} --> tabuleiro
+;;; Este construtor não recebe qualquer argumento, e devolve um novo tabuleiro
+;;; vazio. A representação escolhida foi um array bidimensional pois permite
+;;; aceder a qualquer posição do tabuleiro em tempo constante.
 (defun cria-tabuleiro ()
-  (make-array '(18 10) :element-type 'boolean)
+  (make-array '(20 10) :element-type 'boolean))
+
+;;; copia-tabuleiro: tabuleiro --> tabuleiro
+;;; Este construtor recebe um tabuleiro, e devolve um novo tabuleiro com o mesmo
+;;; conteúdo do tabuleiro recebido. O tabuleiro devolvido deve ser um objecto
+;;; computacional diferente e deverá garantir que qualquer alteração feita ao
+;;; tabuleiro original não deve ser repercutida no novo tabuleiro e vice-versa.
+(defun copia-tabuleiro (tabuleiro)
+  (let ((novoTabuleiro (cria-tabuleiro)))
+  ;copia os valores maximos das linhas de cada coluna e depois devolve o
+  ;tabuleiro copiado
+  (dotimes (coluna 10 (dotimes (l 18 novoTabuleiro)
+                        (dotimes (c 10)
+                          (cond ((tabuleiro-preenchido-p tabuleiro l c)
+                                    (tabuleiro-preenche! novoTabuleiro l c))))))
+  (setf (aref novoTabuleiro 18 coluna) (aref tabuleiro 18 coluna))
+  (setf (aref novoTabuleiro 19 coluna) (aref tabuleiro 19 coluna)))
+
+))
+
+(defun tabuleiro-preenchido-p (tabuleiro linha coluna)
+  (aref tabuleiro linha coluna)
 )
 
-(defun copia-tabuleiro (tab_velho)
-  (let ((tab_novo (cria-tabuleiro)))
-  (dotimes (l 18 tab_novo)
-    (dotimes (c 10)
-      (cond ((tabuleiro-preenchido-p tab_velho l c)
-                (tabuleiro-preenche! tab_novo l c)))))))
+(defun tabuleiro-altura-coluna (tabuleiro coluna)
+  ;if cache value if valid then return cached value
+  (if (aref tabuleiro 19 coluna)
+    (aref tabuleiro 18 coluna)
 
-(defun tabuleiro-preenchido-p (tab linha coluna)
-  (aref tab linha coluna)
-)
+  ;otherwise it will compute the value, cache it and then return it
+    (let ((linha 17))
+    (setf (aref tabuleiro 19 coluna) T)
+    (setf (aref tabuleiro 18 coluna)
+      (loop
+        (if (tabuleiro-preenchido-p tabuleiro linha coluna) (return (1+ linha))
+            (if (equal linha 0) (return 0)
+                                (decf linha))))))))
 
-(defun tabuleiro-altura-coluna (tab col)
-  (let ((linha 17))
-  (loop
-    (if (tabuleiro-preenchido-p tab linha col) (return (1+ linha))
-        (if (equal linha 0) (return 0)
-                            (decf linha))))))
+
+;(defun tabuleiro-altura-coluna (tab col)
+;  (let ((linha 17))
+;  (loop
+;    (if (tabuleiro-preenchido-p tab linha col) (return (1+ linha))
+;        (if (equal linha 0) (return 0)
+;                            (decf linha))))))
 
 (defun tabuleiro-preenche! (tab linha coluna)
-  (cond ((and (>= linha 0) (<= linha 17) (>= coluna 0) (<= coluna 9))
-            (setf (aref tab linha coluna) T))
-        (t t)))
+  (if (and (>= linha 0) (<= linha 17) (>= coluna 0) (<= coluna 9))
+      (progn (setf (aref tab linha coluna) T)
+             (setf (aref tab 19 coluna) NIL))))
 
 
 (defun tabuleiro-linha-completa-p (tab linha)
@@ -42,7 +71,8 @@
       :displaced-to arr
        :displaced-index-offset (* line (array-dimension arr 1))
     )
- )
+)
+
 (defun tabuleiro-topo-preenchido-p (tab)
   (let ((array_linha (array-slice tab 17)))
   (cond ((position T array_linha) T)
@@ -59,8 +89,12 @@
           (setf RESULT NIL)
         ))))))
 
-
-
+;;; tabuleiro-remove-linha!: tabuleiro x inteiro --> {}
+;;; Este modificador recebe um tabuleiro, um inteiro correspondente ao número de
+;;; linha, e altera o tabuleiro recebido removendo essa linha do tabuleiro, e
+;;; fazendo com que as linhas por cima da linha removida desçam uma linha.
+;;; As linhas que estão por baixo da linha removida não podem ser alteradas.
+;;; O valor devolvido por desta função não está definido.
 (defun tabuleiro-remove-linha! (tab linha)
   (let ((upperl linha))
   (loop for l from linha below 17
@@ -72,8 +106,14 @@
   ;; Acho que ela ja esta vazia anyway... porque se tivermos preenchido ai perdemos o jogo
   ;; A linha de cima (17) tem de passar a ser vazia caso nao seja
   (dotimes (c 10)
-    (setf (aref tab 17 c) NIL))))
+    (setf (aref tab 17 c) NIL))
+  (dotimes (c 10)
+    (setf (aref tab 18 c) (decf (aref tab 18 c)))
+  )
+))
 
+
+;; FIXME
 (defun tabuleiro->array (tab)
   (copia-tabuleiro tab))
 (defun array->tabuleiro (array)
