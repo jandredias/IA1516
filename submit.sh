@@ -10,7 +10,8 @@ cat loader.lisp >> proj.lisp
 
 
 if [ "$#" -eq  "0" ]
-  then echo "File proj.lisp written!"
-else
+  then
   clisp -i proj.lisp
+else
+  echo "File proj.lisp written!"
 fi

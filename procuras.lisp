@@ -9,6 +9,8 @@
 ;;;   O problema e' resolvido usando uma procura em profundidade primeiro em a'rvore
 ;;; @param struct problema
 ;;; @return lista de acoes
+(defvar *NIVEL* 0
+  "Count of widgets made so far.")
 (defun procura-pp (problema_in)
   (let ((estado      (problema-estado-inicial problema_in))
         (function_solucao (problema-solucao problema_in))
@@ -17,16 +19,21 @@
         (proximoProblema NIL)
         (proximoEstado NIL)
        )
+
   (if (funcall (problema-solucao problema_in) estado) (list)
     (dolist (proxima_accao (funcall (problema-accoes problema_in) estado) -1)
-	(setf proximoEstado (funcall function_resultado estado proxima_accao))
-	(setf proximoProblema (make-problema :estado-inicial proximoEstado
+      (incf *NIVEL*)
+    	(setf proximoEstado (funcall function_resultado estado proxima_accao))
+    	(setf proximoProblema (make-problema   :estado-inicial proximoEstado
                                              :solucao function_solucao
                                              :accoes function_accoes
                                              :resultado function_resultado
-                                             :custo-caminho (problema-custo-caminho problema_in))
+                                             :custo-caminho (problema-custo-caminho problema_in)))
+        (format t "NIVEL: ~d" *NIVEL*)
+        (desenha-estado proximoEstado)
         (setf accoesa (procura-pp proximoProblema))
-        (if (listp accoesa) (return (push proxima_accao accoes))))))))
+        (decf *NIVEL*)
+        (if (listp accoesa) (return (push proxima_accao accoesa)))))))
 
 #|(defstruct PROBLEMA estado-inicial solucao accoes resultado custo-caminho)
  => estado-inicial – contem o estado inicial do problema de procura;
