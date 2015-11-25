@@ -11,16 +11,13 @@
        (null (estado-pecas-por-colocar estado_in))))
 
 ;; Devolve lista accoes: estado
-(defun accoes (estado_in)
+(defun accoes (estado-in)
   (let ((lista (list)))
-   (dolist (el (pecas_possiveis (first (estado-pecas-por-colocar estado_in))))
+    (if (estado-final-p estado-in) NIL (progn
+    (dolist (el (pecas_possiveis (first (estado-pecas-por-colocar estado-in))))
       (loop for k from (- 10 (array-dimension el 1)) downto 0
-      do (
-        if (not 
-        push (cria-accao k el) lista
-
-	)))
-   lista))
+      do (push (cria-accao k el) lista)))
+    lista))))
 
 ;;; resultado: estado x accao --> estado
 ;;; Esta função recebe um estado e uma acção, e devolve um novo estado que
@@ -32,87 +29,60 @@
 ;;; devolve-se o estado. Se não estiver, removem-se as linhas e calculam-se
 ;;; os pontos obtidos.
 
-(defun resultado (estado_in accao)
-)
-(defun resultado (estado_in accao)
-     (let* (( coluna (accao-coluna accao))
-            ( coluna_aux (accao-coluna accao))
-            ( peca   (accao-peca accao))
-            ( dimensoes_peca (array-dimensions peca))
-            ( max -10)
-            ( lst_contorno_peca '())
-            ( base_writing_x 0)
-            ( base_writing_y 0)
-            ( writing_x 0)
-            ( writing_y 0)
-            ( valor_calc 0)
-            ( real_cut 0)
-            ( dif_linhas 0)
-            ( new-points 0)
+(defun resultado (estado-in accao)
+  (let ((estado (copia-estado estado-in))
+        (peca   (accao-peca accao))
+        (contorno '())
+        (linhaBase 0)
+        (colunaAux (accao-coluna accao))
+        (valorCalc 0))
 
-            ;; Copiar tabuleiro novo
-            ( tabuleiro_criado (copia-tabuleiro (estado-tabuleiro estado_in)) ))
+    ;;Cria lista com alturas da peca
+    (loop for j from (1- (second (array-dimensions peca))) downto 0 do
+      (dotimes (n (first (array-dimensions peca)))
+               (when (aref peca n j)
+                     (progn (push n contorno) (return T)))))
 
-     ;; Cria lista com alturas da peca
-     (loop for j from (1- (second dimensoes_peca)) downto 0 do
-       (dotimes (n (first dimensoes_peca))
-           (when (aref peca n j)(progn (push n lst_contorno_peca) (return T)))
-       )
-     )
+    ;; contorno e a lista que contem a altura de cada uma das colunas da peca
+    ;; por exemplo, na peca L rodada 90graus a direita seria:
+    ;;
+    ;;   OOO
+    ;;   O    => (0, 1, 1)
+    
+    ;;Calcular posicao de escrita
+    (dolist (el contorno)
+            (setf valorCalc
+              (-(tabuleiro-altura-coluna (estado-tabuleiro estado-in) colunaAux) el))
+            (cond ((< linhaBase valorCalc) (setf linhaBase valorCalc)))
+            (incf colunaAux))
 
-     ;; Calcular posicao de escrita
-     (dolist (elem lst_contorno_peca max)
-         (setf valor_calc (- (tabuleiro-altura-coluna tabuleiro_criado coluna_aux) elem))
+    ;;Colocar peca no tabuleiro
+    (dotimes (y (first (array-dimensions peca)))
+      (setf linhaAux (+ linhaBase y))
+      (dotimes (x (second (array-dimensions peca)))
+        (setf colunaAux (+ (accao-coluna accao) x))
+        (cond ((aref peca y x) (tabuleiro-preenche! (estado-tabuleiro estado) linhaAux colunaAux)))))
+    
+    (setf pontos (estado-pontos estado-in))
+    (if (and (< linhaBase 18) (not (tabuleiro-topo-preenchido-p (estado-tabuleiro estado))))
+        (progn
+          (setf linhasRemovidas 0)
+          (setf linhasPontos 0)
+          (loop for i from linhaBase to (1+ linhaAux) do
+            (progn
+              (if (tabuleiro-linha-completa-p (estado-tabuleiro estado) (- i linhasRemovidas))
+                  (progn
+                    (tabuleiro-remove-linha! (estado-tabuleiro estado) (- i linhasRemovidas))
+                    (incf linhasRemovidas)))))
 
-         (cond ((< max valor_calc) (setf max valor_calc )))
-         (incf coluna_aux))
-
-
-
-     (setf base_writing_x max)
-     (setf base_writing_y coluna)
-
-     ;;Colocar peca no tabuleiro
-     (dotimes (n (first dimensoes_peca))
-       (setf writing_x (+ base_writing_x N))
-       (dotimes (i (second dimensoes_peca))
-         (setf writing_y (+ base_writing_y i))
-         (cond ((aref peca n i) (tabuleiro-preenche! tabuleiro_criado writing_x writing_y))
-         )
-       )
-     )
-
-     (setf new-points (estado-pontos estado_in))
-
-     ;;Verificar se nao perdeu o jogo
-     (if (and (< writing_x 18) (not (tabuleiro-topo-preenchido-p tabuleiro_criado)))
-       ;;Remover linhas preenchidas caso nao tenha perdido
-       (progn
-       (setf real_cut base_writing_x)
-       (setf max 0)
-       (loop for aux from base_writing_x to (1+ writing_x) do
-             (progn
-                 (setf max aux)
-                 (if (tabuleiro-linha-completa-p tabuleiro_criado real_cut)
-                       (tabuleiro-remove-linha! tabuleiro_criado real_cut)
-                       (incf real_cut))))
-       (decf real_cut)
-       (setf dif_linhas (- max real_cut))
-       (cond
-           ((= dif_linhas 0) T)
-           ((= dif_linhas 1) (setf new-points (+ new-points 100)) )
-           ((= dif_linhas 2) (setf new-points (+ new-points 300)) )
-           ((= dif_linhas 3) (setf new-points (+ new-points 500)) )
-           ((= dif_linhas 4) (setf new-points (+ new-points 800)) )))
-     T)
-     ;; Criar novo estado + atualizar listas
-     (make-estado :pontos new-points
-                  :pecas-por-colocar (rest (estado-pecas-por-colocar estado_in))
-                  :pecas-colocadas (push (first (estado-pecas-por-colocar estado_in))(estado-pecas-colocadas estado_in))
-                  :tabuleiro tabuleiro_criado)))
-
-
-
+        (cond ((= linhasRemovidas 0) T)
+              ((= linhasRemovidas 1) (setf pontos (+ pontos 100)))
+              ((= linhasRemovidas 2) (setf pontos (+ pontos 300)))
+              ((= linhasRemovidas 3) (setf pontos (+ pontos 500)))
+              ((= linhasRemovidas 4) (setf pontos (+ pontos 800))))))
+    (setf (estado-pecas-por-colocar estado) (rest (estado-pecas-por-colocar estado-in)))
+    (setf (estado-pecas-colocadas estado) (push (first (estado-pecas-por-colocar estado-in)) (estado-pecas-colocadas estado)))
+    estado))
 
 ;; Devolve inteiro
 (defun qualidade (estado_in)
