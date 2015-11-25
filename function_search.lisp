@@ -20,12 +20,12 @@
     lista))))
 
 ;;; resultado: estado x accao --> estado
-;;; Esta função recebe um estado e uma acção, e devolve um novo estado que
-;;; resulta de aplicar a acção recebida no estado original. Atenção, o estado
-;;; original não pode ser alterado em situação alguma. Esta função deve
-;;; actualizar as listas de peças, colocar a peça especificada pela acção na
-;;; posição correcta do tabuleiro. Depois de colocada a peça, é verificado se o
-;;; topo do tabuleiro está preenchido. Se estiver, não se removem linhas e
+;;; Esta funcão recebe um estado e uma accão, e devolve um novo estado que
+;;; resulta de aplicar a accão recebida no estado original. Atencão, o estado
+;;; original não pode ser alterado em situacão alguma. Esta funcão deve
+;;; actualizar as listas de pecas, colocar a peca especificada pela accão na
+;;; posicão correcta do tabuleiro. Depois de colocada a peca, e verificado se o
+;;; topo do tabuleiro esta preenchido. Se estiver, não se removem linhas e
 ;;; devolve-se o estado. Se não estiver, removem-se as linhas e calculam-se
 ;;; os pontos obtidos.
 
@@ -35,7 +35,12 @@
         (contorno '())
         (linhaBase 0)
         (colunaAux (accao-coluna accao))
-        (valorCalc 0))
+        (valorCalc 0)
+        (linhaAux)
+        (pontos)
+        (linhasRemovidas)
+        (linhasPontos)
+       )
 
     ;;Cria lista com alturas da peca
     (loop for j from (1- (second (array-dimensions peca))) downto 0 do
@@ -68,18 +73,18 @@
         (progn
           (setf linhasRemovidas 0)
           (setf linhasPontos 0)
-          (loop for i from linhaBase to (1+ linhaAux) do
+          (loop for i from linhaBase to linhaAux do
             (progn
               (if (tabuleiro-linha-completa-p (estado-tabuleiro estado) (- i linhasRemovidas))
                   (progn
                     (tabuleiro-remove-linha! (estado-tabuleiro estado) (- i linhasRemovidas))
                     (incf linhasRemovidas)))))
-
         (cond ((= linhasRemovidas 0) T)
               ((= linhasRemovidas 1) (setf pontos (+ pontos 100)))
               ((= linhasRemovidas 2) (setf pontos (+ pontos 300)))
               ((= linhasRemovidas 3) (setf pontos (+ pontos 500)))
               ((= linhasRemovidas 4) (setf pontos (+ pontos 800))))))
+    (setf (estado-pontos estado) pontos)
     (setf (estado-pecas-por-colocar estado) (rest (estado-pecas-por-colocar estado-in)))
     (setf (estado-pecas-colocadas estado) (push (first (estado-pecas-por-colocar estado-in)) (estado-pecas-colocadas estado)))
     estado))

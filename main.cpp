@@ -16,7 +16,7 @@ inline void yyerror(const char *msg) { std::cout << msg << std::endl; }
 %}
 
 SPACE   [ \t\n]
-CAR     [A-Za-z0-9()_\-;#\\<>=+!*\:\"\'\.]
+CAR     [A-Za-z0-9()_\-;#\\<>=+!*\:\"\'\.\{\}]
 
 %%
 

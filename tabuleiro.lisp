@@ -6,15 +6,15 @@
 
 ;;; cria-tabuleiro: {} --> tabuleiro
 ;;; Este construtor não recebe qualquer argumento, e devolve um novo tabuleiro
-;;; vazio. A representação escolhida foi um array bidimensional pois permite
-;;; aceder a qualquer posição do tabuleiro em tempo constante.
+;;; vazio. A representacão escolhida foi um array bidimensional pois permite
+;;; aceder a qualquer posicão do tabuleiro em tempo constante.
 (defun cria-tabuleiro ()
   (make-array '(20 10) :element-type 'boolean))
 
 ;;; copia-tabuleiro: tabuleiro --> tabuleiro
 ;;; Este construtor recebe um tabuleiro, e devolve um novo tabuleiro com o mesmo
-;;; conteúdo do tabuleiro recebido. O tabuleiro devolvido deve ser um objecto
-;;; computacional diferente e deverá garantir que qualquer alteração feita ao
+;;; conteudo do tabuleiro recebido. O tabuleiro devolvido deve ser um objecto
+;;; computacional diferente e devera garantir que qualquer alteracão feita ao
 ;;; tabuleiro original não deve ser repercutida no novo tabuleiro e vice-versa.
 (defun copia-tabuleiro (tabuleiro)
   (let ((novoTabuleiro (cria-tabuleiro)))
@@ -76,11 +76,11 @@
          (setf RESULT NIL)))))))
 
 ;;; tabuleiro-remove-linha!: tabuleiro x inteiro --> {}
-;;; Este modificador recebe um tabuleiro, um inteiro correspondente ao número de
+;;; Este modificador recebe um tabuleiro, um inteiro correspondente ao numero de
 ;;; linha, e altera o tabuleiro recebido removendo essa linha do tabuleiro, e
-;;; fazendo com que as linhas por cima da linha removida desçam uma linha.
+;;; fazendo com que as linhas por cima da linha removida descam uma linha.
 ;;; As linhas que estão por baixo da linha removida não podem ser alteradas.
-;;; O valor devolvido por desta função não está definido.
+;;; O valor devolvido por desta funcão não esta definido.
 (defun tabuleiro-remove-linha! (tab linha)
   (let ((upperl linha))
   (loop for l from linha below 17
@@ -93,10 +93,9 @@
   ;; porque se tivermos preenchido ai perdemos o jogo
   ;; A linha de cima (17) tem de passar a ser vazia caso nao seja
   (dotimes (c 10)
-    (setf (aref tab 17 c) NIL))
+    (setf (aref tab 17 c) NIL)) 
   (dotimes (c 10)
-    (setf (aref tab 18 c) (decf (aref tab 18 c)))
-  )
+    (setf (aref tab 19 c) NIL))
 ))
 
 
