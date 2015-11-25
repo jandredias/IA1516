@@ -15,7 +15,11 @@
   (let ((lista (list)))
    (dolist (el (pecas_possiveis (first (estado-pecas-por-colocar estado_in))))
       (loop for k from (- 10 (array-dimension el 1)) downto 0
-      do (push (cria-accao k el) lista)))
+      do (
+        if (not 
+        push (cria-accao k el) lista
+
+	)))
    lista))
 
 ;;; resultado: estado x accao --> estado
