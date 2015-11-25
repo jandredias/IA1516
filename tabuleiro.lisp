@@ -5,17 +5,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;; cria-tabuleiro: {} --> tabuleiro
-;;; Este construtor não recebe qualquer argumento, e devolve um novo tabuleiro
-;;; vazio. A representacão escolhida foi um array bidimensional pois permite
-;;; aceder a qualquer posicão do tabuleiro em tempo constante.
+;;; Este construtor nao recebe qualquer argumento, e devolve um novo tabuleiro
+;;; vazio. A representacao escolhida foi um array bidimensional pois permite
+;;; aceder a qualquer posicao do tabuleiro em tempo constante.
 (defun cria-tabuleiro ()
   (make-array '(20 10) :element-type 'boolean))
 
 ;;; copia-tabuleiro: tabuleiro --> tabuleiro
 ;;; Este construtor recebe um tabuleiro, e devolve um novo tabuleiro com o mesmo
 ;;; conteudo do tabuleiro recebido. O tabuleiro devolvido deve ser um objecto
-;;; computacional diferente e devera garantir que qualquer alteracão feita ao
-;;; tabuleiro original não deve ser repercutida no novo tabuleiro e vice-versa.
+;;; computacional diferente e devera garantir que qualquer alteracao feita ao
+;;; tabuleiro original nao deve ser repercutida no novo tabuleiro e vice-versa.
 (defun copia-tabuleiro (tabuleiro)
   (let ((novoTabuleiro (cria-tabuleiro)))
   ;copia os valores maximos das linhas de cada coluna e depois devolve o
@@ -79,8 +79,8 @@
 ;;; Este modificador recebe um tabuleiro, um inteiro correspondente ao numero de
 ;;; linha, e altera o tabuleiro recebido removendo essa linha do tabuleiro, e
 ;;; fazendo com que as linhas por cima da linha removida descam uma linha.
-;;; As linhas que estão por baixo da linha removida não podem ser alteradas.
-;;; O valor devolvido por desta funcão não esta definido.
+;;; As linhas que estao por baixo da linha removida nao podem ser alteradas.
+;;; O valor devolvido por desta funcao nao esta definido.
 (defun tabuleiro-remove-linha! (tab linha)
   (let ((upperl linha))
   (loop for l from linha below 17
@@ -98,8 +98,6 @@
     (setf (aref tab 19 c) NIL))
 ))
 
-
-;; FIXME
 (defun tabuleiro->array (tabuleiro)
   (let ((arrayVar (make-array '(18 10) :element-type 'boolean)))
   (dotimes (l 18 arrayVar)
@@ -109,3 +107,4 @@
 
 (defun array->tabuleiro (array)
   (copia-tabuleiro array))
+;FIXME

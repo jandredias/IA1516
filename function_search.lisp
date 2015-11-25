@@ -20,13 +20,13 @@
     lista))))
 
 ;;; resultado: estado x accao --> estado
-;;; Esta funcão recebe um estado e uma accão, e devolve um novo estado que
-;;; resulta de aplicar a accão recebida no estado original. Atencão, o estado
-;;; original não pode ser alterado em situacão alguma. Esta funcão deve
-;;; actualizar as listas de pecas, colocar a peca especificada pela accão na
-;;; posicão correcta do tabuleiro. Depois de colocada a peca, e verificado se o
-;;; topo do tabuleiro esta preenchido. Se estiver, não se removem linhas e
-;;; devolve-se o estado. Se não estiver, removem-se as linhas e calculam-se
+;;; Esta funcao recebe um estado e uma accao, e devolve um novo estado que
+;;; resulta de aplicar a accao recebida no estado original. Atencao, o estado
+;;; original nao pode ser alterado em situacao alguma. Esta funcao deve
+;;; actualizar as listas de pecas, colocar a peca especificada pela accao na
+;;; posicao correcta do tabuleiro. Depois de colocada a peca, e verificado se o
+;;; topo do tabuleiro esta preenchido. Se estiver, nao se removem linhas e
+;;; devolve-se o estado. Se nao estiver, removem-se as linhas e calculam-se
 ;;; os pontos obtidos.
 
 (defun resultado (estado-in accao)

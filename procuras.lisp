@@ -10,6 +10,11 @@
 ;;; @param struct problema
 ;;; @return lista de acoes
 
+;(defun procura-pp (problema-in)
+;  (let ((result))
+;    (setf result (procura-ppAux problema-in))
+;    (if (eq -1 result) NIL result)))
+
 (defun procura-pp (problema_in)
   (let ((estado      (problema-estado-inicial problema_in))
         (function_solucao (problema-solucao problema_in))
@@ -20,17 +25,22 @@
         (accoes NIL)
        )
 
-  (if (funcall (problema-solucao problema_in) estado) (list)
-    (dolist (proxima_accao (funcall (problema-accoes problema_in) estado) -1)
+  (if (funcall (problema-solucao problema_in) estado) T
+    (progn
+      (dolist (proxima_accao (funcall (problema-accoes problema_in) estado))
+            (push proxima_accao accoes))
+      (dolist (proxima_accao accoes NIL)
     	(setf proximoEstado (funcall function_resultado estado proxima_accao))
-    	(setf proximoProblema (make-problema   :estado-inicial proximoEstado
+    	(setf proximoProblema (make-problema :estado-inicial proximoEstado
                                              :solucao function_solucao
                                              :accoes function_accoes
                                              :resultado function_resultado
-                                             :custo-caminho (problema-custo-caminho problema_in)))
+                                             :custo-caminho
+                                          (problema-custo-caminho problema_in)))
         (setf accoes (procura-pp proximoProblema))
-        
-        (if (listp accoes) (return (push proxima_accao accoes)))))))
+        (if (eq accoes T) (return (list proxima_accao)))
+        (if (not (null accoes))
+            (return (push proxima_accao accoes))))))))
 
 (defun procura-A* (problema-in heuristica)
   (let* ((estado       (problema-estado-inicial problema-in))
@@ -70,15 +80,18 @@
                             (funcall heuristica proximoEstado)))))
                   ;END SETF LISTA ABERTOS
                 );end of dolist
-
-                (setf node (pop listaAbertos)))))))
+                (setf node (pop listaAbertos))
+                (if (null node) (return NIL)))))))
 
 (defun procura-best (tabuleiro pecas)
-  (print tabuleiro) (print pecas)
-;TODO
-)
+  (let ((problema (make-problema :estado-inicial proximoEstado 
+                                 :solucao function_solucao
+                                 :accoes function_accoes
+                                 :resultado function_resultado
+                                 :custo-caminho #'(lambda (x) 0))))))
+;FIXME
 
-;;; Abstracão de dados
+;;; Abstracao de dados
 ;;; Stack ordenada por custos
 (defun criaLista (node) (list node))
 ;;(defun removeLista (lista) (pop lista))
