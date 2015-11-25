@@ -18,7 +18,19 @@
       do (push (cria-accao k el) lista)))
    lista))
 
-   (defun resultado (estado_in accao)
+;;; resultado: estado x accao --> estado
+;;; Esta função recebe um estado e uma acção, e devolve um novo estado que
+;;; resulta de aplicar a acção recebida no estado original. Atenção, o estado
+;;; original não pode ser alterado em situação alguma. Esta função deve
+;;; actualizar as listas de peças, colocar a peça especificada pela acção na
+;;; posição correcta do tabuleiro. Depois de colocada a peça, é verificado se o
+;;; topo do tabuleiro está preenchido. Se estiver, não se removem linhas e
+;;; devolve-se o estado. Se não estiver, removem-se as linhas e calculam-se
+;;; os pontos obtidos.
+
+(defun resultado (estado_in accao)
+)
+(defun resultado (estado_in accao)
      (let* (( coluna (accao-coluna accao))
             ( coluna_aux (accao-coluna accao))
             ( peca   (accao-peca accao))
