@@ -13,12 +13,20 @@ cat loader.lisp >> proj.lisp
 if [ "$#" -eq  "0" ]
   then
   cat debug.lisp >> proj.lisp
-  echo "Version that loads debug"
+  echo ""
+  echo -e -n "\e[33;1m Warning \e[0m"
+  echo -e -n "Version that loads debug"
+  echo -e "\e[33;1m Warning \e[0m"
+  echo ""
   echo -e "\e[31m DO NOT SUBMIT\e[0m"
   echo -e "\e[31m DO NOT SUBMIT\e[0m"
   echo -e "\e[31m DO NOT SUBMIT\e[0m"
   echo -e "\e[31m DO NOT SUBMIT\e[0m"
+  read -n 1 c
   clisp -i proj.lisp
+  echo -e -n "\e[33;1m Warning \e[0m"
+  echo -e -n "Version that loads debug"
+  echo -e "\e[33;1m Warning \e[0m"
   echo -e "\e[31m DO NOT SUBMIT\e[0m"
   echo -e "\e[31m DO NOT SUBMIT\e[0m"
   echo -e "\e[31m DO NOT SUBMIT\e[0m"
