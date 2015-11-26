@@ -6,7 +6,7 @@
 
 ;;; descricao
 ;;;   Resolve um problema que a estrutura recebida represente
-;;;   O problema e' resolvido usando uma procura em profundidade primeiro em a'rvore
+;;;   O prob e resolvido usando uma procura em profundidade primeiro em arvore
 ;;; @param struct problema
 ;;; @return lista de acoes
 
