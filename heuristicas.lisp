@@ -25,13 +25,14 @@
 ;;; So we’ll have to minimize these holes.
 (defun holes (estado-in)
   (let  ((sum 0)
+        (tabuleiro (estado-tabuleiro estado-in))
         )
         (dotimes  (coluna 10 sum)
                   (progn
                     (dotimes (altura
-                               (tabuleiro-altura
+                               (tabuleiro-altura-coluna
                                  (estado-tabuleiro estado-in) coluna))
-                             (if (not (tabuleiro-preenchido-p altura coluna))
+                             (if (not (tabuleiro-preenchido-p tabuleiro altura coluna))
                                  (incf sum)))))))
 
 ;;; bumpiness: estado --> inteiro
