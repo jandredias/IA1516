@@ -8,7 +8,7 @@
 ;;; Este construtor nao recebe qualquer argumento, e devolve um novo tabuleiro
 ;;; vazio. A representacao escolhida foi um array bidimensional pois permite
 ;;; aceder a qualquer posicao do tabuleiro em tempo constante.
-;;; Para além das posições do tabuleiro foi ainda incluida uma 19a linha que
+;;; Para alem das posicoes do tabuleiro foi ainda incluida uma 19a linha que
 ;;; contem o numero da linha mais alta para cada coluna.
 (defun cria-tabuleiro ()
   (make-array '(20 10) :element-type 'boolean))
@@ -100,6 +100,12 @@
     (setf (aref tab 19 c) NIL))
 ))
 
+;;; tabuleiro->array: tabuleiro -> array
+;;; Este transformador de saida recebe um tabuleiro e devolve um novo array com
+;;; 18 linhas e 10 colunas, que para cada linha e coluna devera conter o valor
+;;; logico correspondente a cada posicao do tabuleiro. O array retornado devera
+;;; garantir que qualquer alteracao feita ao tabuleiro original nao deve ser 
+;;; repercutida no novo array e vice-versa.
 (defun tabuleiro->array (tabuleiro)
   (let ((arrayVar (make-array '(18 10) :element-type 'boolean)))
   (dotimes (l 18 arrayVar)
@@ -107,6 +113,16 @@
       (cond ((tabuleiro-preenchido-p tabuleiro l c)
              (setf (aref arrayVar l c) T)))))))
 
-(defun array->tabuleiro (array)
-  (copia-tabuleiro array))
-;FIXME
+;;; array->tabuleiro: array -> tabuleiro
+;;; Este transformador de entrada recebe um array com 18 linhas e 10 colunas 
+;;; cujas posicoes tem o valor logico T ou Nil, e constroi um novo tabuleiro 
+;;; com o conteudo do array recebido. O tabuleiro devolvido devera garantir que
+;;; qualquer alteracao feita ao array original nao deve ser repercutida no novo
+;;; tabuleiro e vice-versa.
+(defun array->tabuleiro (array-in)
+  (let  ((tabuleiro (cria-tabuleiro)))
+        (dotimes (c 10)
+                 (dotimes (l 18)
+                          (cond ((aref array-in l c)
+                                 (tabuleiro-preenche! tabuleiro l c)))))
+  tabuleiro))

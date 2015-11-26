@@ -29,8 +29,8 @@
 ;;; peca 90o no sentido horario, e volta-se a gerar para todas as colunas
 ;;; possiveis da esquerda para a direita. No entanto, se ao rodar uma peca
 ;;; obter uma configuracao geometrica ja explorada anteriormente (como por
-;;; exemplo no caso da peca O em que todas as rotacões correspondem a mesma
-;;; configuracao) nao devem ser geradas novamente as accões.
+;;; exemplo no caso da peca O em que todas as rotacoes correspondem a mesma
+;;; configuracao) nao devem ser geradas novamente as accoes.
 (defun accoes (estado-in)
   (let ((lista (list)))
     (if (estado-final-p estado-in) NIL (progn
@@ -137,7 +137,7 @@
 ;;; ao maximo a oportunidade. Assim sendo o custo de oportunidade pode ser
 ;;; calculado como a diferenca entre o maximo possivel e o efetivamente
 ;;; conseguido. Portanto esta funcao, dado um estado, devolve o custo de
-;;; oportunidade de todas as accões realizadas ate ao momento, assumindo que e
+;;; oportunidade de todas as accoes realizadas ate ao momento, assumindo que e
 ;;; sempre possivel fazer o maximo de pontos por cada peca colocada.
 ;;; Ao usarmos esta funcao como custo, os algoritmos de procura irao tentar
 ;;; minimizar o custo de oportunidade.
@@ -162,11 +162,25 @@
 ;;; Esta funcao recebe uma peca, e devolve uma lista de pecas que contem as
 ;;; representacoes possiveis dessa mesma peca rodada. 
 (defun pecas_possiveis (peca)
-  (cond ((equal peca 'i) (list peca-i1 peca-i0))
-        ((equal peca 'l) (list peca-l3 peca-l2 peca-l1 peca-l0))
-        ((equal peca 'j) (list peca-j3 peca-j2 peca-j1 peca-j0))
-        ((equal peca 'o) (list peca-o0))
-        ((equal peca 's) (list peca-s1 peca-s0))
-        ((equal peca 'z) (list peca-z1 peca-z0))
-        ((equal peca 't) (list peca-t3 peca-t2 peca-t1 peca-t0))))
-
+  (cond ((equal peca 'i) (list  (make-array (list 1 4) :initial-element T)
+                                (make-array (list 4 1) :initial-element T)))
+        ((equal peca 'l) (list  (make-array (list 2 3) :initial-contents '((T T T)(nil nil T)))
+                                (make-array (list 3 2) :initial-contents '((nil T)(nil T)(T T)))
+                                (make-array (list 2 3) :initial-contents '((T nil nil)(T T T)))
+                                (make-array (list 3 2) :initial-contents '((T T)(T nil)(T nil)))))
+        ((equal peca 'j) (list  (make-array (list 2 3) :initial-contents '((nil nil T)(T T T)))
+                                (make-array (list 3 2) :initial-contents '((T nil)(T nil)(T T)))
+                                (make-array (list 2 3) :initial-contents '((T T T)(T nil nil)))
+                                (make-array (list 3 2) :initial-contents '((T T)(nil T)(nil T)))))
+        ((equal peca 'o) (list  (make-array (list 2 2) :initial-element T)))
+        ((equal peca 's) (list  (make-array (list 3 2) :initial-contents '((nil T)(T T)(T nil)))
+                                (make-array (list 2 3) :initial-contents '((T T nil)(nil T T)))))
+        ((equal peca 'z) (list  (make-array (list 3 2) :initial-contents '((T nil)(T T)(nil T)))
+                                (make-array (list 2 3) :initial-contents '((nil T T)(T T nil)))
+        ))
+        ((equal peca 't) (list  (make-array (list 3 2) :initial-contents '((nil T)(T T)(nil T)))
+                                (make-array (list 2 3) :initial-contents '((nil T nil)(T T T)))
+                                (make-array (list 3 2) :initial-contents '((T nil)(T T)(T nil)))
+                                (make-array (list 2 3) :initial-contents '((T T T)(nil T nil)))
+        ))
+  ))

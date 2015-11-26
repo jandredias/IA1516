@@ -10,7 +10,7 @@
 ;;; @param struct problema
 ;;; @return lista de acoes
 
-;;; procura-pp: problema -> lista accões
+;;; procura-pp: problema -> lista accoes
 ;;; Esta funcao recebe um problema e usa a procura em profundidade primeiro em
 ;;; arvore para obter uma solucao para resolver o problema. Devolve uma lista de
 ;;; accoes que se executada pela ordem especificada ira levar do estado inicial
@@ -46,7 +46,7 @@
         (if (not (null accoes))
             (return (push proxima_accao accoes))))))))
 
-;;; procura-A*: problema x heuristica -> lista accões
+;;; procura-A*: problema x heuristica -> lista accoes
 ;;; Esta funcao recebe um problema e uma funcao heuristica, e utiliza o
 ;;; algoritmo de procura A* em arvore para tentar determinar qual a sequencia de
 ;;; accoes de modo a maximizar os pontos obtidos. A funcao heuristica
@@ -96,30 +96,35 @@
 
 ;;; procura-best: array x lista pecas -> lista accoes
 ;;; Esta funcao recebe um array correspondente a um tabuleiro e uma lista de
-;;; pecas por colocar, inicializa o estado e a estrutura problema com as funcões
+;;; pecas por colocar, inicializa o estado e a estrutura problema com as funcoes
 ;;; escolhidas pelo grupo, e ira usar a melhor procura e a melhor heuristica e 
 ;;; melhor funcao custo/qualidade feita pelo grupo para obter a sequencia de 
 ;;; accoes de modo a conseguir colocar todas as pecas no tabuleiro com o maximo
 ;;; de pontuacao. No entanto, tenham em consideracao que esta funcao ira ter um
 ;;; limite de tempo para retornar um resultado, portanto nao vos serve de nada
-;;; retornar a solucao optima se excederem o tempo especificado. É importante
+;;; retornar a solucao optima se excederem o tempo especificado. E importante
 ;;; encontrar um compromisso entre a pontuacao obtida e o tempo de execucao do
 ;;; algoritmo. Esta funcao ira ser a funcao usada para avaliar a qualidade da
 ;;; vossa versao final. Se assim o entenderem, nesta funcao ja podem usar
-;;; implementacões e optimizacões especificas para o jogo do Tetris.
-;;; É importante ter em conta, que para alem destas funcões explicitamente
-;;; definidas (que serao testadas automaticamente), na 2.ª fase do projecto
+;;; implementacoes e optimizacoes especificas para o jogo do Tetris.
+;;; E importante ter em conta, que para alem destas funcoes explicitamente
+;;; definidas (que serao testadas automaticamente), na 2a fase do projecto
 ;;; deverao implementar tecnicas adicionais de optimizacao, varias heuristicas,
-;;; ou ate mesmo funcões de custo alternativas, e testa-las. Cabe aos alunos
+;;; ou ate mesmo funcoes de custo alternativas, e testa-las. Cabe aos alunos
 ;;; decidir que tecnicas/heuristicas adicionais irao precisar para que o vosso
 ;;; algoritmo final procura-best seja o melhor possivel.
 (defun procura-best (tabuleiro pecas)
   ;;FIXME
-  (let ((problema (make-problema :estado-inicial proximoEstado 
-                                 :solucao function_solucao
-                                 :accoes function_accoes
-                                 :resultado function_resultado
-                                 :custo-caminho #'(lambda (x) 0))))))
+  (let ((problema (make-problema :estado-inicial 
+                                   (make-estado :pontos 0
+                                                :pecas-por-colocar pecas
+                                                :pecas-colocadas '()
+                                                :tabuleiro (array->tabuleiro tabuleiro))
+                                 :solucao   'solucao
+                                 :accoes    'accoes
+                                 :resultado 'resultado
+                                 :custo-caminho #'(lambda () 0))))
+  (procura-A* problema 'heuristica)))
 
 ;;; Abstracao de dados
 ;;; Stack ordenada por custos

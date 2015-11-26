@@ -7,14 +7,14 @@
 ;;; O tipo estado representa o estado de um jogo de Tetris. Este tipo devera ser
 ;;; implementado obrigatoriamente como uma estrutura em Common Lisp com os
 ;;; seguintes campos:
-;;; -> pontos – o numero de pontos conseguidos ate ao momento no jogo;
-;;; -> pecas-por-colocar – uma lista com as pecas que ainda estao por colocar,
+;;; -> pontos - o numero de pontos conseguidos ate ao momento no jogo;
+;;; -> pecas-por-colocar - uma lista com as pecas que ainda estao por colocar,
 ;;;    pela ordem de colocacao. As pecas nesta lista sao representadas pelo
 ;;;    simbolo correspondente a letra da peca, i.e. i,j,l,o,s,z,t;
-;;; -> pecas-colocadas – uma lista com as pecas ja colocadas no tabuleiro
+;;; -> pecas-colocadas - uma lista com as pecas ja colocadas no tabuleiro
 ;;;    (representadas tambem pelo simbolo). Esta lista deve encontrar-se
 ;;;    ordenada da peca mais recente para a mais antiga;
-;;; -> tabuleiro – o tabuleiro com as posicões actualmente preenchidas do jogo.
+;;; -> tabuleiro - o tabuleiro com as posicoes actualmente preenchidas do jogo.
 (defstruct ESTADO pontos pecas-por-colocar pecas-colocadas tabuleiro)
 
 ;;; copia-estado: estado -> estado

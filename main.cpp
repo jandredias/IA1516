@@ -10,19 +10,19 @@
 
 static std::vector<std::string> hrefs;
 
-
+int linha = 0;
 inline void yyerror(const char *msg) { std::cout << msg << std::endl; }
 
 %}
 
-SPACE   [ \t\n]
-CAR     [A-Za-z0-9()_\-;#\\<>=+!*\:\"\'\.\{\}]
+SPACE   [ \t]
+CAR     [A-Za-z0-9()_\-\;\#\\<>=+!*\:\"\'\.\{\}\|\,\.]
 
 %%
 
 {SPACE}|{CAR}    ;
-
-.            { char a = *yytext; std::cout << "Fizeste merda "; printf("char: %c %d", a,a);}
+\n           { linha++; }
+.            { char a = *yytext; std::cout << "Fizeste merda na linha " << linha << " "; printf("char: %c %d", a,a); std::cout << std::endl; }
 
 %%
 
