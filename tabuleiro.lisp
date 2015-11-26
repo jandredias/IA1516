@@ -8,6 +8,8 @@
 ;;; Este construtor nao recebe qualquer argumento, e devolve um novo tabuleiro
 ;;; vazio. A representacao escolhida foi um array bidimensional pois permite
 ;;; aceder a qualquer posicao do tabuleiro em tempo constante.
+;;; Para além das posições do tabuleiro foi ainda incluida uma 19a linha que
+;;; contem o numero da linha mais alta para cada coluna.
 (defun cria-tabuleiro ()
   (make-array '(20 10) :element-type 'boolean))
 
