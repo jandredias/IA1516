@@ -58,7 +58,7 @@
 ;;;
 (defun heuristica (estado-in)
   (let  ((a  0.510066)
-         (b -0.760666)
+         (b -0.860666)
          (c  0.356630)
          (d  0.184483))
         (+ (* a (aggregate-height estado-in))
