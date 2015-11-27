@@ -123,8 +123,8 @@
                                  :solucao   'solucao
                                  :accoes    'accoes
                                  :resultado 'resultado
-                                 :custo-caminho #'(lambda () 0))))
-  (procura-A* problema 'heuristica)))
+                                 :custo-caminho #'(lambda (estado) (list-length (estado-pecas-colocadas estado))))))
+  (procura-A* problema #'heuristica)))
 
 ;;; Abstracao de dados
 ;;; Stack ordenada por custos

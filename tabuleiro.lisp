@@ -52,7 +52,8 @@
 (defun tabuleiro-preenche! (tab linha coluna)
   (if (and (>= linha 0) (<= linha 17) (>= coluna 0) (<= coluna 9))
       (progn (setf (aref tab linha coluna) T)
-             (setf (aref tab 19 coluna) NIL))))
+             (setf (aref tab 19 coluna) NIL)))
+T)
 
 
 (defun tabuleiro-linha-completa-p (tab linha)
