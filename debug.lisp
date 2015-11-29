@@ -3,12 +3,14 @@
   (let (
         ( problema             NIL)
         ( melhor-problema      problema-in)
-        ( test-melhor-problema NIL)
+        ( calculated-best      NIL)
         ( estado-inicial       (problema-estado-inicial problema-in) )
        )
- 
-    (if (= profundidade 0) (progn (desenha-estado (problema-estado-inicial problema-in)) (read-char) (return-from procura-n-niveis melhor-problema)))
-    
+
+    ;(if (= profundidade 0) (progn (desenha-estado (problema-estado-inicial problema-in)) (read-char) (return-from procura-n-niveis melhor-problema)))
+    ;(if (= profundidade 0) (progn (desenha-estado (problema-estado-inicial problema-in)) (return-from procura-n-niveis melhor-problema)))
+    (if (= profundidade 0) (return-from procura-n-niveis melhor-problema))
+	
     (dolist (accao (funcall (problema-accoes problema-in)
                             (problema-estado-inicial problema-in)))
             (setf estado (funcall (problema-resultado problema-in)
@@ -17,17 +19,21 @@
             ;cria problema com o estado gerado
             (setf next-problema (copy-problema problema-in))
             (setf (problema-estado-inicial next-problema) estado)
-            
-            (setf test-melhor-problema (procura-n-niveis
+
+            (setf calculated-best (procura-n-niveis
                                           next-problema
                                           heuristica
                                           (1- profundidade)))
+			;(format t "profundidade: ~D" profundidade)
+			;(format t "~%")
+			;(format t "Calculado recursivo: ~,4f" (funcall heuristica (problema-estado-inicial calculated-best)))
+			;(format t "~%")
+			;(format t "Antigo melhor      : ~,4f" (funcall heuristica (problema-estado-inicial melhor-problema)))
+			;(format t "~%")
 
-            (print (funcall heuristica (problema-estado-inicial test-melhor-problema)))
-            (print (funcall heuristica (problema-estado-inicial melhor-problema)))
-            (if (< (funcall heuristica (problema-estado-inicial test-melhor-problema))
+            (if (< (funcall heuristica (problema-estado-inicial calculated-best))
                    (funcall heuristica (problema-estado-inicial melhor-problema)))
-                (progn (print 'escolhiummelhor) (setf melhor-problema next-problema))))
+                (setf melhor-problema calculated-best)))
       melhor-problema))
 
 (defun heuristicaA4123 (estado-in)
@@ -37,13 +43,12 @@
                                  :resultado      'resultado
                                  :custo-caminho #'(lambda (estado) (* 0 (list-length (estado-pecas-colocadas estado))))))
         )
-    (print 'ENTREINAHEURISTICADE4)
     (estado-pontos
       (problema-estado-inicial
         (procura-n-niveis
           problema #'(lambda (estado) (- 0 (estado-pontos estado))) 2)))))
 
- 
+
 
 ;; Lista cheia de nodes do ( valorHeuristica ; estado )
 ;; Recebe lista + node a inserir
@@ -80,18 +85,6 @@
 ))
 
 
-(defun procura-best (tabuleiro pecas)
-  ;;FIXME
-  (let ((problema (make-problema :estado-inicial
-                                   (make-estado :pontos 0
-                                                :pecas-por-colocar pecas
-                                                :pecas-colocadas '()
-                                                :tabuleiro (array->tabuleiro tabuleiro))
-                                 :solucao   'solucao
-                                 :accoes    'accoes
-                                 :resultado 'resultado
-                                 :custo-caminho #'(lambda (estado) (* 0 (list-length (estado-pecas-colocadas estado)))))))
-  (procura-A* problema #'heuristicaA4123)))
 
 
 ;ppp que devolve n melhores estado
@@ -137,16 +130,111 @@
             proximoEstado)
    (funcall heuristica proximoEstado))
 |#
+
+(defun procura-best (tabuleiro pecas)
+  (let ((problema-in (make-problema :estado-inicial
+                                   (make-estado :pontos 0
+                                                :pecas-por-colocar pecas
+                                                :pecas-colocadas '()
+                                                :tabuleiro (array->tabuleiro tabuleiro))
+                                 :solucao   'solucao
+                                 :accoes    'accoes
+                                 :resultado 'resultado
+                                 :custo-caminho #'qualidade))
+        (listMaxSize 3100)
+        (currentSize 0)
+        )
+  (let* ((heuristica #'heuristica)
+		 (estado       (problema-estado-inicial problema-in))
+         (listaAbertos  (criaLista
+                          (cons (cons estado NIL)
+                               (funcall (problema-custo-caminho problema-in)
+                                         estado))))
+         (node)
+         (proximoEstado))
+         (setf node (pop listaAbertos))
+         (loop
+            (if (funcall (problema-solucao problema-in) (caar node))
+              (return (cdar node))
+              ;else
+              (progn
+                ;gera as acoes a tomar para gerar os estados
+                (dolist (proxima_accao (funcall (problema-accoes problema-in)
+                                                (caar node)));end dolist header
+
+                  ;gera o estado tendo em conta cada accao
+                  (setf proximoEstado (funcall (problema-resultado problema-in)
+                                               (caar node) proxima_accao))
+
+                  ;BEGIN SETF LISTA ABERTOS
+                  (format t "variable: ~5d real: ~5d" currentSize (list-length listaAbertos))
+                  (setf listaAbertos
+                    (subseq (insereLista listaAbertos
+                      (cons (cons proximoEstado
+                              (if (eq (cdar node) NIL)
+                                  (list proxima_accao)
+                                  (append (cdar node) (list proxima_accao))
+                              )
+                            )
+                         (+ (funcall (problema-custo-caminho problema-in)
+                                     proximoEstado)
+                            (funcall heuristica proximoEstado)))) 0 (min currentSize listMaxSize)))
+                   (incf currentSize)
+                  ;END SETF LISTA ABERTOS
+                );end of dolist
+                (setf node (pop listaAbertos))
+                (decf currentSize)
+                (if (null node) (return NIL))))))))
+;;; heuristica: estado --> inteiro
+;;;
+
+(defun heuristica (estado-in)
+  (let  ((alturas  32)
+         (buracos  512)
+         (bumpi    64)
+         (potencial 1.2))
+		(format t "alturas_t  : ~6f alturas  : ~6f" (* alturas (aggregate-height estado-in)) (aggregate-height estado-in))
+		(format t "~%")
+		(format t "buracos_t  : ~6f buracos  : ~6f" (* buracos (holes estado-in)) (holes estado-in))
+		(format t "~%")
+		(format t "bumpiness_t: ~6f bumpiness: ~6f" (* bumpi (bumpiness estado-in)) (bumpiness estado-in))
+		(format t "~%")
+		(format t "potencial_t: ~6f potencial: ~6f" (* potencial (custo-oportunidade estado-in)) (custo-oportunidade estado-in))
+		(format t "~%")
+		(format t "~%")
+		(format t "~%")
+         (+ (* alturas (aggregate-height estado-in))
+           (* buracos (holes estado-in))
+           (* potencial (custo-oportunidade estado-in))
+           (* bumpi (bumpiness estado-in)))))
+
+           
 ;;; Teste 25 E2
 ;;; procura-best num tabuleiro com 4 jogadadas por fazer. Os grupos tem um tempo limitado para conseguir obter pelo menos 500 pontos.
 ;;; deve retornar IGNORE
 (ignore-value (setf a1 '#2A((T T T T NIL NIL T T T T)(T T T NIL NIL NIL T T T T)(T T T NIL NIL NIL T T T T)(T T T NIL NIL NIL T T T T)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL))))
 ;;;deve retornar IGNORE
-(ignore-value (setf pecas '(t i l l)))
+(ignore-value (setf pecas '(l l l l l i)))
+;;; Teste 11 E2 - correspondente ao Teste 18 publicado na fase 1 mas que nao chegou a ser testado na fase 1
+;;; Testes fn resultado com pecas mais dificeis
+;;deve retornar IGNORE
+(ignore-value (setf estado1 (make-estado :pontos 0 :pecas-por-colocar PECAS :pecas-colocadas '() :tabuleiro (array->tabuleiro a1))))
+
+#|(setf problema-in (make-problema :estado-inicial estado1
+                                 :solucao        'solucao
+                                 :accoes         'accoes
+                                 :resultado      'resultado
+                                 :custo-caminho #'(lambda (estado) (* 2 (list-length (estado-pecas-colocadas estado))))))|#
+;(setf a (procura-n-niveis problema-in #'complete-lines 2))
+;(print a)
+;(read-char)
 (setf r1 (procura-best a1 pecas))
 (print r1)
-(read-char)
+;(read-char)
 ;;;deve retornar T
 (executa-jogadas (make-estado :tabuleiro (array->tabuleiro a1) :pecas-por-colocar pecas :pontos 0 :pecas-colocadas '()) r1 )
-(quit)
+;(ignore-value (setf estado2 (make-estado :pontos 0 :pecas-por-colocar PECAS :pecas-colocadas '() :tabuleiro (array->tabuleiro a2))))
+;(SETf r1 ((0 . #2A((T T T) (T NIL NIL)) ) (0 . #2A((T T T) (T NIL NIL)) ) )
 
+(executa-jogadas (make-estado :tabuleiro (array->tabuleiro a1) :pecas-por-colocar pecas :pontos 0 :pecas-colocadas '()) r1 )
+(quit)
