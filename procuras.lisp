@@ -114,7 +114,7 @@
 ;;; decidir que tecnicas/heuristicas adicionais irao precisar para que o vosso
 ;;; algoritmo final procura-best seja o melhor possivel.
 (defun procura-best (tabuleiro pecas)
-  (let ((problema-in (make-problema :estado-inicial
+  (let* ((problema-in (make-problema :estado-inicial
                                    (make-estado :pontos 0
                                                 :pecas-por-colocar pecas
                                                 :pecas-colocadas '()
@@ -123,10 +123,9 @@
                                  :accoes    'accoes
                                  :resultado 'resultado
                                  :custo-caminho #'qualidade))
-        (listMaxSize 1000)
-        (currentSize 0)
-        )
-  (let* ((heuristica #'heuristica)
+         (listMaxSize 1000)
+         (currentSize 0)
+         (heuristica #'heuristica)
 		 (estado       (problema-estado-inicial problema-in))
          (listaAbertos  (criaLista
                           (cons (cons estado NIL)
@@ -162,7 +161,7 @@
                 );end of dolist
                 (setf node (pop listaAbertos))
                 (decf currentSize)
-                (if (null node) (return NIL))))))))
+                (if (null node) (return NIL)))))))
 
 ;;; Abstracao de dados
 ;;; Stack ordenada por custos
