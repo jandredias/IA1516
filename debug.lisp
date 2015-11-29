@@ -34,7 +34,7 @@
   ( subseq listaEstados 0 (min nr-accoes n))
 ))
 
-
+#|
 (defun procura-best (tabuleiro pecas)
   ;;FIXME
   (let ((problema (make-problema :estado-inicial
@@ -100,7 +100,7 @@
             proximoEstado)
    (funcall heuristica proximoEstado))
 |#
-;;; Teste 25 E2
+#|;;; Teste 25 E2
 ;;; procura-best num tabuleiro com 4 jogadadas por fazer. Os grupos tem um tempo limitado para conseguir obter pelo menos 500 pontos.
 ;;; deve retornar IGNORE
 (ignore-value (setf a1 '#2A((T T T T NIL NIL T T T T)(T T T NIL NIL NIL T T T T)(T T T NIL NIL NIL T T T T)(T T T NIL NIL NIL T T T T)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL))))
@@ -112,3 +112,4 @@
 ;;;deve retornar T
 (executa-jogadas (make-estado :tabuleiro (array->tabuleiro a1) :pecas-por-colocar pecas :pontos 0 :pecas-colocadas '()) r1 )
 (quit)
+|#
