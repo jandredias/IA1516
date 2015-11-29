@@ -1,3 +1,7 @@
+;;; heuristicaSuperFixe
+;(defun heuristicaMelhorSubEstado (estado-in)
+;  (let  ((max 0))
+
 
 ;;; aggregate-height: estado --> inteiro
 ;;; This heuristic tell us how "high" a grid is.To compute the aggregate height,
