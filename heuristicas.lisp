@@ -56,12 +56,14 @@
 
 ;;; heuristica: estado --> inteiro
 ;;;
+
 (defun heuristica (estado-in)
-  (let  ((a  0.510066)
-         (b -0.760666)
-         (c  0.356630)
-         (d  0.184483))
-        (+ (* a (aggregate-height estado-in))
-           (* b (complete-lines estado-in))                                    
-           (* c (holes estado-in))                                    
-           (* d (bumpiness estado-in)))))
+  (let  ((alturas  0.510066)
+         (pontos  -0.760666)
+         (buracos  0.356630)
+         (bumpi    0.184483))
+        (+ (* alturas (aggregate-height estado-in))
+           (* pontos (complete-lines estado-in))                                    
+           (* buracos (holes estado-in))                                    
+           (* bumpi (bumpiness estado-in)))))
+

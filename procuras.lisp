@@ -61,7 +61,7 @@
                           (cons (cons estado NIL)
                                (funcall (problema-custo-caminho problema-in)
                                          estado))))
-         (node)  
+         (node)
          (proximoEstado))
          (setf node (pop listaAbertos))
         (loop
@@ -72,7 +72,7 @@
                 ;gera as acoes a tomar para gerar os estados
                 (dolist (proxima_accao (funcall (problema-accoes problema-in)
                                                 (caar node)));end dolist header
-                 
+
                   ;gera o estado tendo em conta cada accao
                   (setf proximoEstado (funcall (problema-resultado problema-in)
                                                (caar node) proxima_accao))
@@ -97,8 +97,8 @@
 ;;; procura-best: array x lista pecas -> lista accoes
 ;;; Esta funcao recebe um array correspondente a um tabuleiro e uma lista de
 ;;; pecas por colocar, inicializa o estado e a estrutura problema com as funcoes
-;;; escolhidas pelo grupo, e ira usar a melhor procura e a melhor heuristica e 
-;;; melhor funcao custo/qualidade feita pelo grupo para obter a sequencia de 
+;;; escolhidas pelo grupo, e ira usar a melhor procura e a melhor heuristica e
+;;; melhor funcao custo/qualidade feita pelo grupo para obter a sequencia de
 ;;; accoes de modo a conseguir colocar todas as pecas no tabuleiro com o maximo
 ;;; de pontuacao. No entanto, tenham em consideracao que esta funcao ira ter um
 ;;; limite de tempo para retornar um resultado, portanto nao vos serve de nada
@@ -115,7 +115,7 @@
 ;;; algoritmo final procura-best seja o melhor possivel.
 (defun procura-best (tabuleiro pecas)
   ;;FIXME
-  (let ((problema (make-problema :estado-inicial 
+  (let ((problema (make-problema :estado-inicial
                                    (make-estado :pontos 0
                                                 :pecas-por-colocar pecas
                                                 :pecas-colocadas '()
@@ -123,13 +123,18 @@
                                  :solucao   'solucao
                                  :accoes    'accoes
                                  :resultado 'resultado
-                                 :custo-caminho #'(lambda (estado) (list-length (estado-pecas-colocadas estado))))))
+                                 :custo-caminho #'(lambda (estado) (* 10 (list-length (estado-pecas-colocadas estado)))))))
   (procura-A* problema #'heuristica)))
 
 ;;; Abstracao de dados
 ;;; Stack ordenada por custos
 (defun criaLista (node) (list node))
+
 ;;(defun removeLista (lista) (pop lista))
+
+;;                                 FIXME nao sei se ordem esta certa 
+;; Lista cheia de nodes do tipo ( (estado;acoes) ; valorHeuristica  )
+;; Recebe lista + node a inserir
 (defun insereLista (lista node)
   (if (or (eq lista NIL) (>= (cdar lista) (cdr node)))
     (cons node lista)
