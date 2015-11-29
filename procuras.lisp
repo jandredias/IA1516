@@ -114,8 +114,7 @@
 ;;; decidir que tecnicas/heuristicas adicionais irao precisar para que o vosso
 ;;; algoritmo final procura-best seja o melhor possivel.
 (defun procura-best (tabuleiro pecas)
-  ;;FIXME
-  (let ((problema (make-problema :estado-inicial
+  (let ((problema-in (make-problema :estado-inicial
                                    (make-estado :pontos 0
                                                 :pecas-por-colocar pecas
                                                 :pecas-colocadas '()
@@ -123,8 +122,47 @@
                                  :solucao   'solucao
                                  :accoes    'accoes
                                  :resultado 'resultado
-                                 :custo-caminho #'(lambda (estado) (* 10 (list-length (estado-pecas-colocadas estado)))))))
-  (procura-A* problema #'heuristica)))
+                                 :custo-caminho #'qualidade))
+        (listMaxSize 1000)
+        (currentSize 0)
+        )
+  (let* ((heuristica #'heuristica)
+		 (estado       (problema-estado-inicial problema-in))
+         (listaAbertos  (criaLista
+                          (cons (cons estado NIL)
+                               (funcall (problema-custo-caminho problema-in)
+                                         estado))))
+         (node)
+         (proximoEstado))
+         (setf node (pop listaAbertos))
+         (loop
+            (if (funcall (problema-solucao problema-in) (caar node))
+              (return (cdar node))
+              ;else
+              (progn
+                ;gera as acoes a tomar para gerar os estados
+                (dolist (proxima_accao (funcall (problema-accoes problema-in)
+                                                (caar node)));end dolist header
+
+                  ;gera o estado tendo em conta cada accao
+                  (setf proximoEstado (funcall (problema-resultado problema-in)
+                                               (caar node) proxima_accao))
+                  (setf listaAbertos
+                    (subseq (insereLista listaAbertos
+                      (cons (cons proximoEstado
+                              (if (eq (cdar node) NIL)
+                                  (list proxima_accao)
+                                  (append (cdar node) (list proxima_accao))
+                              )
+                            )
+                         (+ (funcall (problema-custo-caminho problema-in)
+                                     proximoEstado)
+                            (funcall heuristica proximoEstado)))) 0 (min currentSize listMaxSize)))
+                   (incf currentSize)
+                );end of dolist
+                (setf node (pop listaAbertos))
+                (decf currentSize)
+                (if (null node) (return NIL))))))))
 
 ;;; Abstracao de dados
 ;;; Stack ordenada por custos
@@ -132,7 +170,7 @@
 
 ;;(defun removeLista (lista) (pop lista))
 
-;;                                 FIXME nao sei se ordem esta certa 
+;;                                 FIXME nao sei se ordem esta certa
 ;; Lista cheia de nodes do tipo ( (estado;acoes) ; valorHeuristica  )
 ;; Recebe lista + node a inserir
 (defun insereLista (lista node)

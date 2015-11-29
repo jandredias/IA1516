@@ -20,7 +20,7 @@
 ;;; number of complete lines, because clearing lines is the goal of the AI, and
 ;;; clearing lines will give us more space for more pieces.
 (defun complete-lines (estado-in)
-  (/ (estado-pontos estado-in) 100))
+  (- 0 (/ (estado-pontos estado-in) 1000)))
 
 ;;; holes: estado --> inteiro
 ;;; A hole is defined as an empty space such that there is at least one tile in
@@ -62,11 +62,11 @@
 ;;;
 
 (defun heuristica (estado-in)
-  (let  ((alturas  0.510066)
-         (pontos  -0.760666)
-         (buracos  0.356630)
-         (bumpi    0.184483))
-        (+ (* alturas (aggregate-height estado-in))
-           (* pontos (complete-lines estado-in))
+  (let  ((alturas  1)
+         (buracos  256)
+         (bumpi    64)
+         (potencial 1.2))
+         (+ (* alturas (aggregate-height estado-in))
            (* buracos (holes estado-in))
+           (* potencial (custo-oportunidade estado-in))
            (* bumpi (bumpiness estado-in)))))

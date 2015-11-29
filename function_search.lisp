@@ -22,7 +22,7 @@
 ;;; colocada. Uma accao e considerada valida mesmo que faca o jogador perder o
 ;;; jogo (i.e. preencher a linha do topo). Uma accao e invalida se nao for
 ;;; fisicamente possivel dentro dos limites laterais do jogo.
-;;; A ordem com que sao devolvidas as accoes na lista e muito importante. 
+;;; A ordem com que sao devolvidas as accoes na lista e muito importante.
 ;;; A frente da lista devem estar obrigatoriamente as accoes correspondentes a
 ;;; orientacao inicial da peca, percorrendo todas as colunas possiveis da
 ;;; esquerda para a direita. Depois e escolhida uma nova orientacao, rodando a
@@ -72,7 +72,7 @@
     ;;
     ;;   OOO
     ;;   O    => (0, 1, 1)
-    
+
     ;;Calcular posicao de escrita
     (dolist (el contorno)
             (setf valorCalc
@@ -89,9 +89,9 @@
         (cond ((aref peca y x) (tabuleiro-preenche! (estado-tabuleiro estado)
                                                     linhaAux
                                                     colunaAux)))))
-    
+
     (setf pontos (estado-pontos estado-in))
-    (if (and (< linhaBase 18) 
+    (if (and (< linhaBase 18)
              (not (tabuleiro-topo-preenchido-p (estado-tabuleiro estado))))
         (progn
           (setf linhasRemovidas 0)
@@ -128,6 +128,7 @@
 ;;; Portanto, a funcao qualidade recebe um estado e retorna um valor de
 ;;; qualidade que corresponde ao valor negativo dos pontos ganhos ate ao momento.
 (defun qualidade (estado_in)
+  ;(print (- (estado-pontos estado_in)) )
   (- (estado-pontos estado_in)))
 
 ;;; custo-oportunidade: estado -> inteiro
@@ -160,7 +161,7 @@
 
 ;;; pecas_possiveis: peca --> lista de pecas
 ;;; Esta funcao recebe uma peca, e devolve uma lista de pecas que contem as
-;;; representacoes possiveis dessa mesma peca rodada. 
+;;; representacoes possiveis dessa mesma peca rodada.
 (defun pecas_possiveis (peca)
   (cond ((equal peca 'i) (list peca-i1 peca-i0))
         ((equal peca 'l) (list peca-l3 peca-l2 peca-l1 peca-l0))
