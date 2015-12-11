@@ -58,6 +58,25 @@
                                      (estado-tabuleiro estado-in)
                                      (1+ coluna))))))))
 
+(defun potencial-diferente (estado_in)
+
+  (let ((lista_colocadas (estado-pecas-colocadas estado_in))
+        (valor_oportunidade 0)
+        (valor_real (estado-pontos estado_in)))
+
+      ;;Calcular valor_oportunidade
+      (dolist (elem lista_colocadas)
+        (cond ((eq elem 'I) (incf valor_oportunidade 20))
+              ((eq elem 'J) (incf valor_oportunidade 10))
+              ((eq elem 'L) (incf valor_oportunidade 10))
+              ((eq elem 'S) (incf valor_oportunidade 10))
+              ((eq elem 'Z) (incf valor_oportunidade 10))
+              ((eq elem 'T) (incf valor_oportunidade 10))
+              ((eq elem 'O) (incf valor_oportunidade 10))))
+      (- valor_oportunidade valor_real)))
+
+
+
 ;;; heuristica: estado --> inteiro
 ;;;
 
@@ -65,8 +84,8 @@
   (let  ((alturas  1)
          (buracos  256)
          (bumpi    64)
-         (potencial 1.2))
+         (potencial 2))
          (+ (* alturas (aggregate-height estado-in))
            (* buracos (holes estado-in))
-           (* potencial (custo-oportunidade estado-in))
+           (* potencial (potencial-diferente estado-in))
            (* bumpi (bumpiness estado-in)))))

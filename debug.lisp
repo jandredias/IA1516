@@ -10,7 +10,7 @@
     ;(if (= profundidade 0) (progn (desenha-estado (problema-estado-inicial problema-in)) (read-char) (return-from procura-n-niveis melhor-problema)))
     ;(if (= profundidade 0) (progn (desenha-estado (problema-estado-inicial problema-in)) (return-from procura-n-niveis melhor-problema)))
     (if (= profundidade 0) (return-from procura-n-niveis melhor-problema))
-	
+
     (dolist (accao (funcall (problema-accoes problema-in)
                             (problema-estado-inicial problema-in)))
             (setf estado (funcall (problema-resultado problema-in)
@@ -141,7 +141,7 @@
                                  :accoes    'accoes
                                  :resultado 'resultado
                                  :custo-caminho #'qualidade))
-        (listMaxSize 3100)
+        (listMaxSize 1500)
         (currentSize 0)
         )
   (let* ((heuristica #'heuristica)
@@ -167,7 +167,7 @@
                                                (caar node) proxima_accao))
 
                   ;BEGIN SETF LISTA ABERTOS
-                  (format t "variable: ~5d real: ~5d" currentSize (list-length listaAbertos))
+                  ;(format t "variable: ~5d real: ~5d" currentSize (list-length listaAbertos))
                   (setf listaAbertos
                     (subseq (insereLista listaAbertos
                       (cons (cons proximoEstado
@@ -189,32 +189,32 @@
 ;;;
 
 (defun heuristica (estado-in)
-  (let  ((alturas  32)
-         (buracos  512)
-         (bumpi    64)
-         (potencial 1.2))
-		(format t "alturas_t  : ~6f alturas  : ~6f" (* alturas (aggregate-height estado-in)) (aggregate-height estado-in))
-		(format t "~%")
-		(format t "buracos_t  : ~6f buracos  : ~6f" (* buracos (holes estado-in)) (holes estado-in))
-		(format t "~%")
-		(format t "bumpiness_t: ~6f bumpiness: ~6f" (* bumpi (bumpiness estado-in)) (bumpiness estado-in))
-		(format t "~%")
-		(format t "potencial_t: ~6f potencial: ~6f" (* potencial (custo-oportunidade estado-in)) (custo-oportunidade estado-in))
-		(format t "~%")
-		(format t "~%")
-		(format t "~%")
+  (let  ((alturas  1)
+         (buracos  256)
+         (bumpi    100)
+         (potencial 400))
+		 (format t "alturas_t  : ~6f alturas  : ~6f" (* alturas (aggregate-height estado-in)) (aggregate-height estado-in))
+		 (format t "~%")
+		 (format t "buracos_t  : ~6f buracos  : ~6f" (* buracos (holes estado-in)) (holes estado-in))
+		 (format t "~%")
+		 (format t "bumpiness_t: ~6f bumpiness: ~6f" (* bumpi (bumpiness estado-in)) (bumpiness estado-in))
+		 (format t "~%")
+		 (format t "potencial_t: ~6f potencial: ~6f" (* potencial (potencial-diferente estado-in)) (potencial-diferente estado-in))
+		 (format t "~%")
+		 (format t "~%")
+		 (format t "~%")
          (+ (* alturas (aggregate-height estado-in))
            (* buracos (holes estado-in))
-           (* potencial (custo-oportunidade estado-in))
+           (* potencial (potencial-diferente estado-in))
            (* bumpi (bumpiness estado-in)))))
 
-           
+
 ;;; Teste 25 E2
 ;;; procura-best num tabuleiro com 4 jogadadas por fazer. Os grupos tem um tempo limitado para conseguir obter pelo menos 500 pontos.
 ;;; deve retornar IGNORE
 (ignore-value (setf a1 '#2A((T T T T NIL NIL T T T T)(T T T NIL NIL NIL T T T T)(T T T NIL NIL NIL T T T T)(T T T NIL NIL NIL T T T T)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL)(NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL))))
 ;;;deve retornar IGNORE
-(ignore-value (setf pecas '(l l l l l i)))
+(ignore-value (setf pecas '(t l j l i l)))
 ;;; Teste 11 E2 - correspondente ao Teste 18 publicado na fase 1 mas que nao chegou a ser testado na fase 1
 ;;; Testes fn resultado com pecas mais dificeis
 ;;deve retornar IGNORE
@@ -232,7 +232,7 @@
 (print r1)
 ;(read-char)
 ;;;deve retornar T
-(executa-jogadas (make-estado :tabuleiro (array->tabuleiro a1) :pecas-por-colocar pecas :pontos 0 :pecas-colocadas '()) r1 )
+;(executa-jogadas (make-estado :tabuleiro (array->tabuleiro a1) :pecas-por-colocar pecas :pontos 0 :pecas-colocadas '()) r1 )
 ;(ignore-value (setf estado2 (make-estado :pontos 0 :pecas-por-colocar PECAS :pecas-colocadas '() :tabuleiro (array->tabuleiro a2))))
 ;(SETf r1 ((0 . #2A((T T T) (T NIL NIL)) ) (0 . #2A((T T T) (T NIL NIL)) ) )
 
